@@ -1,10 +1,9 @@
 package com.petpal.backend.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.petpal.backend.dto.AccountDto;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +17,7 @@ import java.util.List;
 @Setter
 public class Account {
     @Id
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long accountId;
     private String username;
     private String password;
@@ -25,5 +25,15 @@ public class Account {
     private String phone;
     private String location;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
+    @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
+
+
+    public Account(AccountDto newAccountDto) {
+        this.username = newAccountDto.getUsername();
+        this.password = newAccountDto.getPassword();
+        this.email = newAccountDto.getEmail();
+        this.phone = newAccountDto.getPhone();
+        this.location = newAccountDto.getLocation();
+    }
 }
