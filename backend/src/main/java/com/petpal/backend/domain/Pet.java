@@ -17,6 +17,7 @@ public class Pet {
     private String petType;
     private String petName;
     private int petAge;
-    @ManyToOne(optional = false)
-    private Account owner;
+    @ManyToOne
+    @JoinColumn(name = "petowner_id")
+    private User petOwner;
 }

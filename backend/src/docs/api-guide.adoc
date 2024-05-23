@@ -1,0 +1,22 @@
+= API Documentation
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[resources-account]]
+== Account
+Service to manage accounts.
+
+[[resources-account-delete]]
+=== Delete an account
+
+A `DELETE` request can be used to delete an account.
+
+.Request
+include::../../target/snippets/delete-account/http-request.adoc[]
+
+.Response
+include::../../target/snippets/delete-account/http-response.adoc[]
