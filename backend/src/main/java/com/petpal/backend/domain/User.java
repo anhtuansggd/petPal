@@ -12,28 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @Getter
 @Setter
-public class Account {
+public class User {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Long accountId;
-    private String username;
-    private String password;
+    private Long userId;
+    @OneToOne(mappedBy = "user")
+    private Authentication authentication;
+    private String name;
     private String email;
     private String phone;
     private String location;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
+    private List<Contract> contracts;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
     @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
 
 
-    public Account(AccountDto newAccountDto) {
-        this.username = newAccountDto.getUsername();
-        this.password = newAccountDto.getPassword();
-        this.email = newAccountDto.getEmail();
-        this.phone = newAccountDto.getPhone();
-        this.location = newAccountDto.getLocation();
-    }
 }

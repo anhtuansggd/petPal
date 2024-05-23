@@ -30,7 +30,7 @@ public class AccountControllerTest {
 
     @Test
     public void deleteAccount() throws Exception {
-        doNothing().when(accountService).delete("testuser");
+//        doNothing().when(accountService).delete("testuser");
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/account?username=testuser"))
                 .andExpect(status().is(200))
