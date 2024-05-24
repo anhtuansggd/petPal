@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request ->{
                     request.requestMatchers("/api/auth/**").permitAll()
                             .requestMatchers("/api/users/**").permitAll()
+                            .requestMatchers("/api/pets/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .build();
