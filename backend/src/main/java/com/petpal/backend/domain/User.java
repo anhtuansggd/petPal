@@ -29,9 +29,10 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private String location;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
+    @JsonIgnore
     private List<Contract> contracts;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
     @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
 
