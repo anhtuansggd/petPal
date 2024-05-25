@@ -1,0 +1,40 @@
+services:
+  petpalDB:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: petpal_db
+    ports:
+      - 5432:5432
+    volumes:
+      - "./postgres_data:/var/lib/postgresql/data:rw"
+  
+  backend:
+    image: anhtuansggd/backend:latest
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports: 
+      - 8081:8081
+    environment:
+      DB_URL: jdbc:postgresql://petpalDB:5432/petpal_db
+      DB_USER: admin
+      DB_PASSWORD: admin
+    depends_on:
+      - petpalDB
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:5050"
+    depends_on:
+      - petpalDB
+    
+#PERSISTENT VOLUMES
+volumes:
+  dbcontainer:
+    driver: local
