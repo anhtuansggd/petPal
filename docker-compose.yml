@@ -36,5 +36,5 @@ services:
     
 #PERSISTENT VOLUMES
 volumes:
-  dbcontainer:
+  petpalDB:
     driver: local
