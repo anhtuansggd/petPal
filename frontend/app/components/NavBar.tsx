@@ -2,9 +2,8 @@
 // import { useState } from "react";
 import React from "react";
 import Link from "next/link";
-import Button from "./Button";
 
-const Navbar = () => {
+const NavBar = () => {
   // const [isOpen, setIsOpen] = useState(false);
   // const toggle = () => {
   //   setIsOpen(!isOpen);
@@ -16,7 +15,9 @@ const Navbar = () => {
       <div className="w-full h-20 bg-white sticky top-0 border-y">
         <div className="container mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full">
-            <Link className="pl-10 pr-16 text-[#48c5bc]" href="/">PETPAL LOGO</Link>
+            <Link className="pl-10 pr-16 text-[#48c5bc]" href="/">
+              PETPAL LOGO
+            </Link>
 
             <ul className="hidden md:flex gap-x-10 text-[#134848]">
               <li>
@@ -51,7 +52,9 @@ const Navbar = () => {
                 <Link href="/">EN</Link>
               </li>
               <li>
-                <Button />
+                <button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">
+                  LogIn
+                </button>
               </li>
               <li>
                 <Link href="/">AVATAR</Link>
