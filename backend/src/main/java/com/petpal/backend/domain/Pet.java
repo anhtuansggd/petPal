@@ -1,6 +1,7 @@
 package com.petpal.backend.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class Pet {
     private String petType;
     private String petName;
     private int petAge;
-    @ManyToOne(optional = false)
-    private Account owner;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "petowner_id")
+    private User petOwner;
 }

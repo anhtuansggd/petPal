@@ -1,14 +1,12 @@
 package com.petpal.backend.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -19,8 +17,14 @@ public class Contract {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long contractId;
-    private Long caregiverId;
-    private Long petownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "caregiver_id")
+    private Caregiver careGiver;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "petowner_id")
+    private User petOwner;
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "contractId")
+    private List<ContractPets> contractPets;
     private LocalDate startDate;
     private LocalDate returnDate;
     private double price;
