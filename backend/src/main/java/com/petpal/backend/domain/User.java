@@ -2,7 +2,9 @@ package com.petpal.backend.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class User implements UserDetails {
@@ -29,18 +33,19 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private String location;
+    private int isCaregiver;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
     @JsonIgnore
     private List<Contract> contracts;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
     @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Authority> authorities = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new Authority("ROLE_PETOWNER"));
-        return roles;
+       return this.authorities;
     }
 
     @Override
@@ -61,5 +66,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+
+    @JsonProperty("authorities")
+    public List<String> getAuthoritiesJson(){
+        return      authorities.stream()
+                .map(Authority::getAuthority)
+                .collect(Collectors.toList());
     }
 }

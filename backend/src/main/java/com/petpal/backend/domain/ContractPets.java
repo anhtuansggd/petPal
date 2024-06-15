@@ -10,12 +10,16 @@ import java.util.Objects;
 @Getter
 @Setter
 public class ContractPets {
-    @Id
+    @EmbeddedId
+    private ContractPetsId id;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("contractId")
     @JoinColumn(name = "contract_id", nullable = false)
     private Contract contractId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("petId")
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 
