@@ -32,7 +32,8 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String phone;
-    private String location;
+    @Embedded
+    private Location location;
     private int isCaregiver;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
     @JsonIgnore

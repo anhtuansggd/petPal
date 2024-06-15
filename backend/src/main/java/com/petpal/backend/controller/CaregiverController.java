@@ -4,13 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petpal.backend.domain.Caregiver;
 import com.petpal.backend.domain.CaregiverAvailability;
 import com.petpal.backend.dto.CaregiverAvailabilityRequest;
+import com.petpal.backend.enums.PetTypeEnum;
 import com.petpal.backend.service.CaregiverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,5 +72,32 @@ public class CaregiverController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchCaregiver(
+            @RequestParam List<PetTypeEnum> petTypes,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam double longitude,
+            @RequestParam double latitude) {
+
+            for(PetTypeEnum petType : petTypes) {
+                System.out.println(petType);
+            }
+
+            List<Caregiver> caregivers = caregiverService.searchCaregivers(petTypes, startDate, endDate, longitude, latitude);
+            return ResponseEntity.status(HttpStatus.OK).body(caregivers);
+    }
+
+    @PatchMapping("/{caregiverId}/pet-types")
+    public ResponseEntity<?> updateCaregiverPetTypes(@PathVariable Long caregiverId, @RequestBody List<PetTypeEnum> petTypes) {
+        try {
+            Caregiver updatedCaregiver = caregiverService.updatePetTypes(caregiverId, petTypes);
+            return ResponseEntity.ok(updatedCaregiver);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
+        }
+    }
+
 
 }
