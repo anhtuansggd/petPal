@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Caregiver extends User{
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "careGiver")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "careGiver")
     private List<Contract> contracts;
     @ElementCollection(targetClass = PetTypeEnum.class)
     @Enumerated(EnumType.STRING)

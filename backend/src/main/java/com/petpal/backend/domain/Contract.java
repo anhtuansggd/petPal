@@ -17,13 +17,13 @@ public class Contract {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long contractId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "caregiver_id")
     private Caregiver careGiver;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petowner_id")
     private User petOwner;
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "contractId")
+    @OneToMany(fetch = FetchType.EAGER , mappedBy = "contractId")
     private List<ContractPets> contractPets;
     private LocalDate startDate;
     private LocalDate returnDate;

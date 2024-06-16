@@ -20,7 +20,7 @@ public class CaregiverAvailability {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long availabitlityId;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "caregiver_id")
     @JsonIgnore
     private Caregiver caregiver;
