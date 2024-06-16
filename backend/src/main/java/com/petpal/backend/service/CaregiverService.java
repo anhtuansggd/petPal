@@ -41,8 +41,8 @@ public class CaregiverService {
             if(request.getFrequency() != null){
                 availability.setFrequency(request.getFrequency());
             }
-            if(request.getDayOfWeek() != null){
-                availability.setDayOfWeek(request.getDayOfWeek());
+            if(request.getDaysOfWeek() != null){
+                availability.setDaysOfWeek(request.getDaysOfWeek());
             }
             if(request.getInterval() != null){
                 availability.setInterval(request.getInterval());
@@ -60,7 +60,7 @@ public class CaregiverService {
             CaregiverAvailability caregiverAvailability = CaregiverAvailability.builder()
                     .caregiver(caregiver.get())
                     .frequency(request.getFrequency())
-                    .dayOfWeek(request.getDayOfWeek())
+                    .daysOfWeek(request.getDaysOfWeek())
                     .interval(request.getInterval())
                     .startDate(request.getStartDate())
                     .endDate(request.getEndDate())

@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,7 +27,8 @@ public class CaregiverAvailability {
     private Caregiver caregiver;
 
     private String frequency;
-    private String dayOfWeek;
+    @ElementCollection
+    private List<String> daysOfWeek;
     private Integer interval;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -38,11 +40,11 @@ public class CaregiverAvailability {
     //private List<LocalDate> bookedDates = new ArrayList<>();
 
     @Builder
-    public CaregiverAvailability(Caregiver caregiver, String frequency, String dayOfWeek, Integer interval,
+    public CaregiverAvailability(Caregiver caregiver, String frequency, List<String> daysOfWeek, Integer interval,
                                  LocalDate startDate, LocalDate endDate) {
         this.caregiver = caregiver;
         this.frequency = frequency;
-        this.dayOfWeek = dayOfWeek;
+        this.daysOfWeek = daysOfWeek;
         this.interval = interval;
 
         this.startDate = startDate;
