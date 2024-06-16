@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -214,6 +215,73 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$", hasSize(equalTo(2))))
                 .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
                 .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")));
+    }
+
+    @Order(11)
+    @Test
+    public void testGetUserProfile() throws Exception {
+        mockMvc.perform(get("/api/users/profile/user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("user"));
+    }
+
+    @Order(12)
+    @Test
+    public void testGetUserPetsEmpty() throws Exception {
+        mockMvc.perform(get("/api/users/{username}/pets", "user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Order(13)
+    @ParameterizedTest
+    @CsvSource({
+            "'GUINEA_PIG', 'Manh Thong', 4, 3",
+            "'DOG', 'Buddy', 3, 3",
+            "'CAT', 'Whiskers', 5, 3"
+    })
+    public void testRegisterPet(String petType, String petName, int petAge, int petowner_id) throws Exception {
+        String jsonRequest = String.format("{\n" +
+                "    \"petType\": \"%s\",\n" +
+                "    \"petName\": \"%s\",\n" +
+                "    \"petAge\": %d,\n" +
+                "    \"petowner_id\": %d\n" +
+                "}", petType, petName, petAge, petowner_id);
+        mockMvc.perform(post("/api/pets/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value(containsString("Pet's id:")));
+    }
+
+    @Order(14)
+    @Test
+    public void testUpdatePet() throws Exception {
+        String jsonRequest = "{\n" +
+                "    \"petType\": \"GUINEA_PIG\",\n" +
+                "    \"petName\": \"Minh Thong\",\n" +
+                "    \"petAge\": 1\n" +
+                "}";
+        mockMvc.perform(patch("/api/pets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.petType").value("GUINEA_PIG"))
+                .andExpect(jsonPath("$.petName").value("Minh Thong"))
+                .andExpect(jsonPath("$.petAge").value(1));
+    }
+
+    @Order(15)
+    @Test
+    public void testDeletePet() throws Exception {
+        // Assuming petId 1 belongs to 'user' who initially has 3 pets
+        mockMvc.perform(delete("/api/pets/1"))
+                .andExpect(status().isNoContent());
+
+        // Verify that after deletion, user 'user' has 2 pets left
+        mockMvc.perform(get("/api/users/{username}/pets", "user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
 

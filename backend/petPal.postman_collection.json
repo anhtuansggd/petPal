@@ -1,0 +1,561 @@
+{
+	"info": {
+		"_postman_id": "9f474691-7417-4206-8631-4b8c72fdf125",
+		"name": "petPal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25463480",
+		"_collection_link": "https://www.postman.com/phaphua/workspace/petpal-api/collection/25463480-9f474691-7417-4206-8631-4b8c72fdf125?action=share&source=collection_link&creator=25463480"
+	},
+	"item": [
+		{
+			"name": "AuthController",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test\",\n    \"password\": \"asdfasdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Jwt Validate",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1BFVE9XTkVSIl0sInN1YiI6InRlc3QiLCJpYXQiOjE3MTc3MzM4MjYsImV4cCI6MTcxNzc1MTgyNn0.XrG3rqUqSLUXwLwxg4F9D4ZQyUmZG4iM9KezwCo1Ve70dyoKYkozbTbZymwPg4XEK0hY__iC7YxCoV5biqIY9A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8081/api/auth/validate?token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1BFVE9XTkVSIl0sInN1YiI6InRlc3QiLCJpYXQiOjE3MTc3MzM4MjYsImV4cCI6MTcxNzc1MTgyNn0.XrG3rqUqSLUXwLwxg4F9D4ZQyUmZG4iM9KezwCo1Ve70dyoKYkozbTbZymwPg4XEK0hY__iC7YxCoV5biqIY9A",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1BFVE9XTkVSIl0sInN1YiI6InRlc3QiLCJpYXQiOjE3MTc3MzM4MjYsImV4cCI6MTcxNzc1MTgyNn0.XrG3rqUqSLUXwLwxg4F9D4ZQyUmZG4iM9KezwCo1Ve70dyoKYkozbTbZymwPg4XEK0hY__iC7YxCoV5biqIY9A"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {                                                                                                                           \n      \"name\": \"John Doe\",                                                      \n      \"phone\": \"+1234567890\",                                                 \n      \"email\": \"john.doe@example.com\",                                        \n      \"username\": \"caregiver\",                                                  \n      \"password\": \"asdfasdf\",\n      \"isCaregiver\": 1                            \n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserController",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users/profile/test",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"test"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/users/profile/test",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"users",
+										"profile",
+										"test"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 10 Jun 2024 07:35:47 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"userId\": 1,\n    \"username\": \"test\",\n    \"password\": null,\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+1234567890\",\n    \"location\": \"hcmc\",\n    \"isCaregiver\": 1,\n    \"authorities\": [\n        {\n            \"id\": 1,\n            \"authority\": \"ROLE_PETOWNER\"\n        },\n        {\n            \"id\": 2,\n            \"authority\": \"ROLE_CAREGIVER\"\n        }\n    ],\n    \"accountNonExpired\": true,\n    \"accountNonLocked\": true,\n    \"credentialsNonExpired\": true,\n    \"enabled\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Johny Deep\",\n    \"email\": \"test2@example.com\",\n    \"isCaregiver\":1,\n\t\t\"password\": \"asdfasdf\",\n    \"latitude\": 50.1748119,\n    \"longitude\": 8.7324472\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/users/profile?username=caregiver",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "caregiver"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users/test/pets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"test",
+								"pets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PetController",
+			"item": [
+				{
+					"name": "Register Pet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"petType\": \"cat\",\n    \"petName\": \"ad\",\n    \"petAge\": 4,\n    \"petowner_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/pets/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"pets",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pet",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"petType\": \"GUINEA_PIG\",\n    \"petName\": \"Monh Thong\",\n    \"petAge\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/pets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"pets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/pets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"pets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CaregiverController",
+			"item": [
+				{
+					"name": "Get Caregiver",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Availability",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n\t\"frequency\": \"weekly\",\n\t\"dayOfWeek\": \"Monday\",\n\t\"interval\": 1,\n\t\"startTime\": \"08:00\",\n\t\"endTime\": \"17:00\",\n\t\"startDate\": \"2023-10-01\",\n\t\"endDate\": \"2023-12-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/{{caregiverId}}/availability",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"{{caregiverId}}",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Availability",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/{{caregiverId}}/availability",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"{{caregiverId}}",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Availability",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"frequency\": \"weekly\",\n    \"dayOfWeek\": \"Tuesday\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/{{caregiverId}}/availability",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"{{caregiverId}}",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pet Types",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    \"DOG\",\n    \"CAT\",\n    \"GUINEA_PIG\"\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/{{caregiverId}}/pet-types",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"{{caregiverId}}",
+								"pet-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Caregivers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/caregivers/search?petTypes=DOG,CAT,GUINEA_PIG&startDate=2023-10-01&endDate=2023-12-01&longitude=8.7428712&latitude=50.1855112",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"caregivers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "petTypes",
+									"value": "DOG,CAT,GUINEA_PIG"
+								},
+								{
+									"key": "startDate",
+									"value": "2023-10-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2023-12-01"
+								},
+								{
+									"key": "longitude",
+									"value": "8.7428712"
+								},
+								{
+									"key": "latitude",
+									"value": "50.1855112"
+								},
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
