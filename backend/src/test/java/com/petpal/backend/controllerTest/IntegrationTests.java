@@ -11,19 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = true)
@@ -170,7 +165,7 @@ public class IntegrationTests {
             "1, 'DOG,CAT,GUINEA_PIG'",
             "2, 'DOG,CAT,GUINEA_PIG'"
     })
-    public void updateCaregiverPetTypesTest(Long caregiverId, String petTypes) throws Exception {
+    public void testUpdateCaregiverPetTypes(Long caregiverId, String petTypes) throws Exception {
         String[] typesArray = petTypes.split(",");
         String requestBody = Arrays.stream(typesArray)
                 .map(String::trim)
@@ -184,19 +179,41 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$.petTypes", hasItems(typesArray)));
     }
 
-
     @Order(9)
+    @ParameterizedTest
+    @CsvSource({
+            "1, 'PET_SITTING,PET_HOSTING'",
+            "2, 'PET_HOSTING'"
+    })
+    void testUpdateCaregiverServiceTypes(Long caregiverId, String serviceTypes) throws Exception {
+        String[] typesArray = serviceTypes.split(",");
+        String requestBody = Arrays.stream(typesArray)
+                .map(String::trim)
+                .map(type -> "\"" + type.trim() + "\"")
+                .collect(Collectors.joining(",", "[", "]"));
+        mockMvc.perform(patch("/api/caregivers/" + caregiverId + "/service-types")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.serviceTypes").isArray())
+                .andExpect(jsonPath("$.serviceTypes", hasItems(typesArray)));
+    }
+
+
+    @Order(10)
     @Test
-    public void searchCaregiversTest() throws Exception {
+    public void testSearchCaregivers() throws Exception {
         mockMvc.perform(get("/api/caregivers/search")
                         .param("petTypes", "DOG,CAT")
                         .param("startDate", "2024-06-15")
                         .param("endDate", "2024-06-20")
                         .param("longitude", "8.7423401")
-                        .param("latitude", "50.1863407"))
+                        .param("latitude", "50.1863407")
+                        .param("serviceType", "PET_HOSTING"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(equalTo(2)))) // Check if the response array is not empty
-                .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT"))); // Example check for pet types
+                .andExpect(jsonPath("$", hasSize(equalTo(2))))
+                .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
+                .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")));
     }
 
 

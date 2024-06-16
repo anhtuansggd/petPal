@@ -6,6 +6,7 @@ import com.petpal.backend.domain.Caregiver;
 import com.petpal.backend.domain.CaregiverAvailability;
 import com.petpal.backend.dto.CaregiverAvailabilityRequest;
 import com.petpal.backend.enums.PetTypeEnum;
+import com.petpal.backend.enums.ServiceTypeEnum;
 import com.petpal.backend.repository.CaregiverAvailabilityRepository;
 import com.petpal.backend.repository.CaregiverRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -75,15 +76,22 @@ public class CaregiverService {
         return caregiverRepository.save(caregiver);
     }
 
-    public List<Caregiver> searchCaregivers(List<PetTypeEnum> petTypes, LocalDate startDate, LocalDate endDate, double longitude, double latitude){
+    public List<Caregiver> searchCaregivers(List<PetTypeEnum> petTypes, LocalDate startDate, LocalDate endDate, ServiceTypeEnum serviceType, double longitude, double latitude) {
         double radiusInMeters = 15000; // 15km
-        return caregiverRepository.searchCaregivers(petTypes, startDate, endDate, longitude, latitude, radiusInMeters);
+        return caregiverRepository.searchCaregivers(petTypes, startDate, endDate,  serviceType, longitude, latitude, radiusInMeters);
     }
 
     public Caregiver updatePetTypes(Long caregiverId, List<PetTypeEnum> petTypes) {
         Caregiver caregiver = caregiverRepository.findById(caregiverId)
                 .orElseThrow(EntityNotFoundException::new);
         caregiver.setPetTypes(petTypes);
+        return caregiverRepository.save(caregiver);
+    }
+
+    public Caregiver updateServiceTypes(Long caregiverId, List<ServiceTypeEnum> serviceTypes) {
+        Caregiver caregiver = caregiverRepository.findById(caregiverId)
+                .orElseThrow(EntityNotFoundException::new);
+        caregiver.setServiceTypes(serviceTypes);
         return caregiverRepository.save(caregiver);
     }
 

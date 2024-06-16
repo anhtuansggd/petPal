@@ -5,6 +5,7 @@ import com.petpal.backend.domain.Caregiver;
 import com.petpal.backend.domain.CaregiverAvailability;
 import com.petpal.backend.dto.CaregiverAvailabilityRequest;
 import com.petpal.backend.enums.PetTypeEnum;
+import com.petpal.backend.enums.ServiceTypeEnum;
 import com.petpal.backend.service.CaregiverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -79,20 +80,27 @@ public class CaregiverController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam double longitude,
-            @RequestParam double latitude) {
+            @RequestParam double latitude,
+            @RequestParam ServiceTypeEnum serviceType) {
 
-            for(PetTypeEnum petType : petTypes) {
-                System.out.println(petType);
-            }
-
-            List<Caregiver> caregivers = caregiverService.searchCaregivers(petTypes, startDate, endDate, longitude, latitude);
-            return ResponseEntity.status(HttpStatus.OK).body(caregivers);
+        List<Caregiver> caregivers = caregiverService.searchCaregivers(petTypes, startDate, endDate,  serviceType, longitude, latitude);
+        return ResponseEntity.status(HttpStatus.OK).body(caregivers);
     }
 
     @PatchMapping("/{caregiverId}/pet-types")
     public ResponseEntity<?> updateCaregiverPetTypes(@PathVariable Long caregiverId, @RequestBody List<PetTypeEnum> petTypes) {
         try {
             Caregiver updatedCaregiver = caregiverService.updatePetTypes(caregiverId, petTypes);
+            return ResponseEntity.ok(updatedCaregiver);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
+        }
+    }
+
+    @PatchMapping("/{caregiverId}/service-types")
+    public ResponseEntity<?> updateCaregiverServiceTypes(@PathVariable Long caregiverId, @RequestBody List<ServiceTypeEnum> serviceTypes) {
+        try {
+            Caregiver updatedCaregiver = caregiverService.updateServiceTypes(caregiverId, serviceTypes);
             return ResponseEntity.ok(updatedCaregiver);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
