@@ -19,7 +19,7 @@ public class Pet {
     private String petName;
     private int petAge;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petowner_id")
     private User petOwner;
 }

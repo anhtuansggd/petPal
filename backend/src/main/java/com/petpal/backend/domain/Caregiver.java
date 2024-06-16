@@ -1,6 +1,7 @@
 package com.petpal.backend.domain;
 
 import com.petpal.backend.enums.PetTypeEnum;
+import com.petpal.backend.enums.ServiceTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Caregiver extends User{
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "careGiver")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "careGiver")
     private List<Contract> contracts;
     @ElementCollection(targetClass = PetTypeEnum.class)
     @Enumerated(EnumType.STRING)
@@ -23,6 +24,9 @@ public class Caregiver extends User{
     private double rating;
     @OneToOne(mappedBy = "caregiver")
     private CaregiverAvailability caregiverAvailability;
+    @ElementCollection(targetClass = ServiceTypeEnum.class)
+    @Enumerated(EnumType.STRING)
+    private List<ServiceTypeEnum> serviceTypes;
 
     public Caregiver(User user) {
         super(user.getUserId(), user.getUsername(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getLocation(), user.getIsCaregiver(), user.getContracts(), user.getPets(), (List<Authority>) user.getAuthorities());

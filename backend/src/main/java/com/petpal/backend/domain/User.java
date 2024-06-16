@@ -35,13 +35,13 @@ public class User implements UserDetails {
     @Embedded
     private Location location;
     private int isCaregiver;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
     @JsonIgnore
     private List<Contract> contracts;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
     @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Authority> authorities = new ArrayList<>();
 
     @Override
