@@ -387,6 +387,15 @@ public class IntegrationTests {
                 "    \"message\": \"Hello everyone\"\n" +
                 "}";
 
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully"));
+    }
+
+
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -401,6 +410,14 @@ public class IntegrationTests {
         Long senderId = 1L; // Assuming this is a valid sender ID
         Long receiverId = 2L; // Assuming this is a valid receiver ID
 
+
+    @Order(22)
+    @Test
+    public void testGetMessages() throws Exception {
+        Long senderId = 1L; // Assuming this is a valid sender ID
+        Long receiverId = 2L; // Assuming this is a valid receiver ID
+
+
         mockMvc.perform(get("/api/chat/messages")
                         .param("senderId", senderId.toString())
                         .param("receiverId", receiverId.toString()))
@@ -408,6 +425,7 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$", hasSize(1))) // Assuming there is one message
                 .andExpect(jsonPath("$[0].message").value("Hello everyone"));
     }
+
 
     @Order(23)
     @Test
