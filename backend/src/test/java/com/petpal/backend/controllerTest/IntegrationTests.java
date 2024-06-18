@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -17,10 +18,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = true)
@@ -408,5 +408,36 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1))) // Assuming there is one message
                 .andExpect(jsonPath("$[0].message").value("Hello everyone"));
+    }
+
+    @Order(23)
+    @Test
+    public void testUploadPetMainAvatar() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("avatar", "avatar.jpg", "image/jpeg", "test image content".getBytes());
+        mockMvc.perform(multipart("/api/pets/1/avatar").file(file))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
+                .andExpect(jsonPath("$.petId").value(1));
+    }
+
+    @Order(24)
+    @Test
+    public void testUploadPetAdditionalImages() throws Exception {
+        MockMultipartFile file1 = new MockMultipartFile("images", "image1.jpg", "image/jpeg", "image1 content".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("images", "image2.jpg", "image/jpeg", "image2 content".getBytes());
+        mockMvc.perform(multipart("/api/pets/1/additional-images").file(file1).file(file2))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Additional images uploaded successfully"))
+                .andExpect(jsonPath("$.petId").value(1));
+    }
+
+    @Order(25)
+    @Test
+    public void testUploadUserAvatar() throws Exception {
+        MockMultipartFile avatarFile = new MockMultipartFile("avatar", "userAvatar.jpg", "image/jpeg", "avatar content".getBytes());
+        mockMvc.perform(multipart("/api/users/profile/1/avatar").file(avatarFile))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
+                .andExpect(jsonPath("$.userId").value(1));
     }
 }

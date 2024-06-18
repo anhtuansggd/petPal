@@ -5,7 +5,9 @@ import com.petpal.backend.repository.UserRepository;
 import com.petpal.backend.utility.CustomPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -42,7 +44,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    public User saveUserWithAvatar(Long userId, MultipartFile avatarFile) throws IOException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setAvatar(avatarFile.getBytes());
+        return userRepository.save(user);
+    }
 
 
 

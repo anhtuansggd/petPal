@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -96,5 +98,11 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
         }
+    }
+
+    @PostMapping("/profile/{userId}/avatar")
+    public ResponseEntity<?> uploadUserAvatar(@PathVariable Long userId, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
+        User user = userService.saveUserWithAvatar(userId, avatarFile);
+        return ResponseEntity.ok(Map.of("message", "Avatar uploaded successfully", "userId", user.getUserId()));
     }
 }
