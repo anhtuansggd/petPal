@@ -318,7 +318,6 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$.bookedDateRanges[*].endDate", hasItem("2024-06-18")));
     }
 
-
     @Order(18)
     @Test
     public void testCompleteContract() throws Exception {
