@@ -13,7 +13,6 @@ services:
       - "./postgres_data:/var/lib/postgresql@12/data:rw"
   
   backend:
-    image: anhtuansggd/backend:latest
     build:
       context: backend
       dockerfile: Dockerfile
@@ -41,6 +40,15 @@ services:
       - "5050:5050"
     depends_on:
       - petpalDB
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:3000
+    depends_on:
+      - backend
     
 #PERSISTENT VOLUMES
 volumes:
