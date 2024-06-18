@@ -274,14 +274,84 @@ public class IntegrationTests {
     @Order(15)
     @Test
     public void testDeletePet() throws Exception {
-        // Assuming petId 1 belongs to 'user' who initially has 3 pets
-        mockMvc.perform(delete("/api/pets/1"))
+        mockMvc.perform(delete("/api/pets/3"))
                 .andExpect(status().isNoContent());
 
-        // Verify that after deletion, user 'user' has 2 pets left
         mockMvc.perform(get("/api/users/{username}/pets", "user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Order(16)
+    @Test
+    public void testCreateContract() throws Exception {
+        String jsonRequest = "{\n" +
+                "    \"petIds\": [1, 2],\n" +
+                "    \"serviceType\": \"PET_SITTING\",\n" +
+                "    \"startDate\": \"2024-06-17\",\n" +
+                "    \"endDate\": \"2024-06-18\"\n" +
+                "}";
+        mockMvc.perform(post("/api/contracts/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest)
+                        .param("petOwnerId", "3") // Add petOwnerId parameter
+                        .param("caregiverId", "1")) // Add caregiverId parameter
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status").value("CREATED"));
+    }
+
+//    @Order(17)
+//    @Test
+//    public void testCreateContractWithUnavailableDates() throws Exception {
+//        String jsonRequest = "{\n" +
+//                "    \"petIds\": [1, 2],\n" +
+//                "    \"serviceType\": \"PET_SITTING\",\n" +
+//                "    \"startDate\": \"2024-07-01\",\n" +
+//                "    \"endDate\": \"2024-07-02\"\n" +
+//                "}";
+//        mockMvc.perform(post("/api/contracts/create")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(jsonRequest)
+//                        .param("petOwnerId", "3") // Add petOwnerId parameter
+//                        .param("caregiverId", "1")) // Add caregiverId parameter
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.status").value("CREATED"));
+//    }
+
+    @Order(17)
+    @Test
+    public void testAcceptContract() throws Exception {
+        Long contractId = 1L;
+        mockMvc.perform(patch("/api/contracts/" + contractId + "/accept")
+                        .param("caregiverId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ON_GOING"));
+
+        // Check if the booked dates are saved after accepting the contract
+        Long caregiverId = 1L;
+        mockMvc.perform(get("/api/caregivers/" + caregiverId + "/availability"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bookedDateRanges[*].startDate", hasItem("2024-06-17")))
+                .andExpect(jsonPath("$.bookedDateRanges[*].endDate", hasItem("2024-06-18")));
+    }
+
+
+    @Order(18)
+    @Test
+    public void testCompleteContract() throws Exception {
+        Long contractId = 1L; // Assume this is the ID of the ongoing contract
+        mockMvc.perform(patch("/api/contracts/" + contractId + "/return"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("PET_RETURNED"));
+    }
+
+    @Order(19)
+    @Test
+    public void testConfirmPetReturn() throws Exception {
+        Long contractId = 1L; // Assume this is the ID of the ongoing contract
+        mockMvc.perform(patch("/api/contracts/" + contractId + "/confirm-return"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.petReturnConfirmed").value(true));
     }
 
 

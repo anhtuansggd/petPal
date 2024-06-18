@@ -1,5 +1,6 @@
 package com.petpal.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petpal.backend.enums.PetTypeEnum;
 import com.petpal.backend.enums.ServiceTypeEnum;
 import jakarta.persistence.*;
@@ -16,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Caregiver extends User{
+    // JsonManagedReference is to serialized
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "careGiver")
     private List<Contract> contracts;
     @ElementCollection(targetClass = PetTypeEnum.class)

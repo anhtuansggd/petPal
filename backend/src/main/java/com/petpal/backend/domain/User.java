@@ -2,6 +2,7 @@ package com.petpal.backend.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class User implements UserDetails {
     @Embedded
     private Location location;
     private int isCaregiver;
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner")
     @JsonIgnore
     private List<Contract> contracts;
