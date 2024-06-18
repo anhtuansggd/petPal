@@ -387,7 +387,6 @@ public class IntegrationTests {
                 "    \"message\": \"Hello everyone\"\n" +
                 "}";
 
-
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -400,7 +399,6 @@ public class IntegrationTests {
     public void testGetMessages() throws Exception {
         Long senderId = 1L; // Assuming this is a valid sender ID
         Long receiverId = 2L; // Assuming this is a valid receiver ID
-
 
         mockMvc.perform(get("/api/chat/messages")
                         .param("senderId", senderId.toString())
