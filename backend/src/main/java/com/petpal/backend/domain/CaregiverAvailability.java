@@ -1,6 +1,7 @@
 package com.petpal.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.Type;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,8 +38,9 @@ public class CaregiverAvailability {
     /*
     * TODO: When we have a booking system, we will need to keep track of the dates that are booked
     * */
-    //@ElementCollection
-    //private List<LocalDate> bookedDates = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "caregiverAvailability")
+    private List<DateRange> bookedDateRanges = new ArrayList<>();
 
     @Builder
     public CaregiverAvailability(Caregiver caregiver, String frequency, List<String> daysOfWeek, Integer interval,
@@ -45,7 +49,6 @@ public class CaregiverAvailability {
         this.frequency = frequency;
         this.daysOfWeek = daysOfWeek;
         this.interval = interval;
-
         this.startDate = startDate;
         this.endDate = endDate;
     }

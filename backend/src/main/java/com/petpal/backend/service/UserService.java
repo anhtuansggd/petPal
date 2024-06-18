@@ -26,6 +26,17 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findById(Long id){
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(value -> value.setPassword(null));
+        return user;
+    }
+
+    public Optional<User> findByIdFull(Long id){
+        Optional<User> user = userRepository.findById(id);
+        return user;
+    }
+
     public User save(User user){
 
         return userRepository.save(user);
