@@ -5,7 +5,9 @@ import com.petpal.backend.dto.PetRegistration;
 import com.petpal.backend.repository.PetRepository;
 import com.petpal.backend.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,5 +76,17 @@ public class PetController {
     public ResponseEntity<?> uploadPetAdditionalImages(@PathVariable Long petId, @RequestParam("images") List<MultipartFile> imageFiles) throws IOException {
         Pet pet = petService.savePetAdditionalImages(petId, imageFiles);
         return ResponseEntity.ok(Map.of("message", "Additional images uploaded successfully", "petId", pet.getPetId()));
+    }
+
+    @GetMapping("/{petId}/avatar")
+    public ResponseEntity<byte[]> getPetMainAvatar(@PathVariable Long petId) {
+        Pet pet = petService.findById(petId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+        byte[] avatar = pet.getMainAvatar();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+
+        return new ResponseEntity<>(avatar, headers, HttpStatus.OK);
     }
 }

@@ -19,9 +19,8 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = true)
 @SpringBootTest
@@ -439,5 +438,21 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
                 .andExpect(jsonPath("$.userId").value(1));
+    }
+
+    @Order(26)
+    @Test
+    public void testGetPetMainAvatar() throws Exception {
+        mockMvc.perform(get("/api/pets/1/avatar"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG));
+    }
+
+    @Order(27)
+    @Test
+    public void testGetUserAvatar() throws Exception {
+        mockMvc.perform(get("/api/users/profile/1/avatar"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG));
     }
 }
