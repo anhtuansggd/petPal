@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pets")
@@ -88,5 +90,18 @@ public class PetController {
         headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(avatar, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{petId}/additional-images")
+    public ResponseEntity<?> getPetAdditionalImages(@PathVariable Long petId) {
+        try {
+            List<byte[]> images = petService.getPetAdditionalImages(petId);
+            List<String> base64Images = images.stream()
+                    .map(image -> Base64.getEncoder().encodeToString(image))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(base64Images);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
+        }
     }
 }

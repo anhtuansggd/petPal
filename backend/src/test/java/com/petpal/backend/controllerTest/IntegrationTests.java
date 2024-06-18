@@ -455,4 +455,14 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.IMAGE_JPEG));
     }
+
+    @Test
+    @Order(28)
+    public void testGetPetAdditionalImages() throws Exception {
+        Long petId = 1L; // Assuming this is a valid pet ID with images
+        mockMvc.perform(get("/api/pets/" + petId + "/additional-images"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2))) // Assuming there are 2 images
+                .andExpect(jsonPath("$[0]", isA(String.class))); // Check if the response is a list of Base64 strings
+    }
 }

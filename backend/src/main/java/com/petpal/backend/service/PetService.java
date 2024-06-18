@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,5 +65,16 @@ public class PetService {
         }
         pet.setImages(images);
         return petRepository.save(pet);
+    }
+
+    @Transactional
+    public List<byte[]> getPetAdditionalImages(Long petId) throws RuntimeException {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+        List<byte[]> images = pet.getImages();
+        if (images == null || images.isEmpty()) {
+            throw new RuntimeException("No additional images found for this pet.");
+        }
+        return images;
     }
 }

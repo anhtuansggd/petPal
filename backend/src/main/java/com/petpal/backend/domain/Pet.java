@@ -30,7 +30,7 @@ public class Pet {
     @Lob
     private byte[] mainAvatar;
     @JsonIgnore
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "pet_images", joinColumns = @JoinColumn(name = "pet_id"))
     @Column(name = "image")
     @Lob

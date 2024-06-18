@@ -119,4 +119,6 @@ public class UserController {
 
         return new ResponseEntity<>(avatar, headers, HttpStatus.OK);
     }
+
+
 }
