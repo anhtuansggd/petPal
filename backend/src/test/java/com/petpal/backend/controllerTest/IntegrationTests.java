@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -17,11 +18,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = true)
 @SpringBootTest
@@ -388,6 +387,15 @@ public class IntegrationTests {
                 "    \"message\": \"Hello everyone\"\n" +
                 "}";
 
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully"));
+    }
+
+
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -402,11 +410,77 @@ public class IntegrationTests {
         Long senderId = 1L; // Assuming this is a valid sender ID
         Long receiverId = 2L; // Assuming this is a valid receiver ID
 
+
+    @Order(22)
+    @Test
+    public void testGetMessages() throws Exception {
+        Long senderId = 1L; // Assuming this is a valid sender ID
+        Long receiverId = 2L; // Assuming this is a valid receiver ID
+
+
         mockMvc.perform(get("/api/chat/messages")
                         .param("senderId", senderId.toString())
                         .param("receiverId", receiverId.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1))) // Assuming there is one message
                 .andExpect(jsonPath("$[0].message").value("Hello everyone"));
+    }
+
+
+    @Order(23)
+    @Test
+    public void testUploadPetMainAvatar() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("avatar", "avatar.jpg", "image/jpeg", "test image content".getBytes());
+        mockMvc.perform(multipart("/api/pets/1/avatar").file(file))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
+                .andExpect(jsonPath("$.petId").value(1));
+    }
+
+    @Order(24)
+    @Test
+    public void testUploadPetAdditionalImages() throws Exception {
+        MockMultipartFile file1 = new MockMultipartFile("images", "image1.jpg", "image/jpeg", "image1 content".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("images", "image2.jpg", "image/jpeg", "image2 content".getBytes());
+        mockMvc.perform(multipart("/api/pets/1/additional-images").file(file1).file(file2))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Additional images uploaded successfully"))
+                .andExpect(jsonPath("$.petId").value(1));
+    }
+
+    @Order(25)
+    @Test
+    public void testUploadUserAvatar() throws Exception {
+        MockMultipartFile avatarFile = new MockMultipartFile("avatar", "userAvatar.jpg", "image/jpeg", "avatar content".getBytes());
+        mockMvc.perform(multipart("/api/users/profile/1/avatar").file(avatarFile))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
+                .andExpect(jsonPath("$.userId").value(1));
+    }
+
+    @Order(26)
+    @Test
+    public void testGetPetMainAvatar() throws Exception {
+        mockMvc.perform(get("/api/pets/1/avatar"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG));
+    }
+
+    @Order(27)
+    @Test
+    public void testGetUserAvatar() throws Exception {
+        mockMvc.perform(get("/api/users/profile/1/avatar"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG));
+    }
+
+    @Test
+    @Order(28)
+    public void testGetPetAdditionalImages() throws Exception {
+        Long petId = 1L; // Assuming this is a valid pet ID with images
+        mockMvc.perform(get("/api/pets/" + petId + "/additional-images"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2))) // Assuming there are 2 images
+                .andExpect(jsonPath("$[0]", isA(String.class))); // Check if the response is a list of Base64 strings
     }
 }

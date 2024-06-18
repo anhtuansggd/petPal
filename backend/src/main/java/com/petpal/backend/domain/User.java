@@ -45,6 +45,24 @@ public class User implements UserDetails {
     private List<Pet> pets = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Authority> authorities = new ArrayList<>();
+    @JsonIgnore
+    @Column
+    @Lob
+    private byte[] avatar;
+
+    public User(Long userId, String username, String password, String name, String email, String phone, Location location, int isCaregiver, List<Contract> contracts, List<Pet> pets, List<Authority> authorities) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.location = location;
+        this.isCaregiver = isCaregiver;
+        this.contracts = contracts;
+        this.pets = pets;
+        this.authorities = authorities;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

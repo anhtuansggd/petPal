@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -22,4 +25,14 @@ public class Pet {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petowner_id")
     private User petOwner;
+    @JsonIgnore
+    @Column
+    @Lob
+    private byte[] mainAvatar;
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "pet_images", joinColumns = @JoinColumn(name = "pet_id"))
+    @Column(name = "image")
+    @Lob
+    private List<byte[]> images = new ArrayList<>();
 }

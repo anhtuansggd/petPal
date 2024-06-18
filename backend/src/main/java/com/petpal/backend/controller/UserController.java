@@ -9,10 +9,14 @@ import com.petpal.backend.service.UserService;
 import com.petpal.backend.utility.CustomPasswordEncoder;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,4 +101,24 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
         }
     }
+
+    @PostMapping("/profile/{userId}/avatar")
+    public ResponseEntity<?> uploadUserAvatar(@PathVariable Long userId, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
+        User user = userService.saveUserWithAvatar(userId, avatarFile);
+        return ResponseEntity.ok(Map.of("message", "Avatar uploaded successfully", "userId", user.getUserId()));
+    }
+
+    @GetMapping("/profile/{userId}/avatar")
+    public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long userId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        byte[] avatar = user.getAvatar();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+
+        return new ResponseEntity<>(avatar, headers, HttpStatus.OK);
+    }
+
+
 }
