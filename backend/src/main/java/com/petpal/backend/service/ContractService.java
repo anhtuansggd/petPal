@@ -78,6 +78,14 @@ public class ContractService {
         return contract;
     }
 
+    public Contract rejectContract(Long contractId, Long caregiverId) {
+        Contract contract = contractRepository.findById(contractId).orElseThrow(
+                () -> new EntityNotFoundException("Contract not found with ID: " + contractId)
+        );
+        contract.setStatus("REJECTED");
+        return contractRepository.save(contract);
+    }
+
     public Contract petReturn(Long contractId) {
         Contract contract = contractRepository.findById(contractId).orElseThrow(
                 () -> new EntityNotFoundException("Contract not found with ID: " + contractId)

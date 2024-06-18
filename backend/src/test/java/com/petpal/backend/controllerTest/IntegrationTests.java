@@ -1,5 +1,6 @@
 package com.petpal.backend.controllerTest;
 
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -300,23 +301,6 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$.status").value("CREATED"));
     }
 
-//    @Order(17)
-//    @Test
-//    public void testCreateContractWithUnavailableDates() throws Exception {
-//        String jsonRequest = "{\n" +
-//                "    \"petIds\": [1, 2],\n" +
-//                "    \"serviceType\": \"PET_SITTING\",\n" +
-//                "    \"startDate\": \"2024-07-01\",\n" +
-//                "    \"endDate\": \"2024-07-02\"\n" +
-//                "}";
-//        mockMvc.perform(post("/api/contracts/create")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonRequest)
-//                        .param("petOwnerId", "3") // Add petOwnerId parameter
-//                        .param("caregiverId", "1")) // Add caregiverId parameter
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.status").value("CREATED"));
-//    }
 
     @Order(17)
     @Test
@@ -327,7 +311,6 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("ON_GOING"));
 
-        // Check if the booked dates are saved after accepting the contract
         Long caregiverId = 1L;
         mockMvc.perform(get("/api/caregivers/" + caregiverId + "/availability"))
                 .andExpect(status().isOk())
@@ -352,6 +335,49 @@ public class IntegrationTests {
         mockMvc.perform(patch("/api/contracts/" + contractId + "/confirm-return"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petReturnConfirmed").value(true));
+    }
+
+    @Order(20)
+    @Test
+    public void testCreateContractWithMissingParameters() throws Exception {
+        String jsonRequest = "{\n" +
+                "    \"petIds\": [1, 2],\n" +
+                "    \"serviceType\": \"PET_SITTING\"\n" + // Missing startDate and endDate
+                "}";
+        mockMvc.perform(post("/api/contracts/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest)
+                        .param("caregiverId", "1")
+                        .param("petOwnerId", "3"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Required parameters are missing"));
+    }
+
+    @Order(20)
+    @Test
+    public void testCreateAndRejectContract() throws Exception {
+        // Create a contract
+        String jsonRequestCreate = "{\n" +
+                "    \"petIds\": [1, 2],\n" +
+                "    \"serviceType\": \"PET_SITTING\",\n" +
+                "    \"startDate\": \"2024-06-10\",\n" +
+                "    \"endDate\": \"2024-06-11\"\n" +
+                "}";
+        MvcResult result = mockMvc.perform(post("/api/contracts/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequestCreate)
+                        .param("petOwnerId", "3")
+                        .param("caregiverId", "1"))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        Long contractId = Long.valueOf(JsonPath.read(result.getResponse().getContentAsString(), "$.contractId").toString());;
+
+        // Reject the contract
+        mockMvc.perform(patch("/api/contracts/" + contractId + "/reject")
+                        .param("caregiverId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("REJECTED"));
     }
 
 
