@@ -13,6 +13,7 @@ services:
       - "./postgres_data:/var/lib/postgresql@12/data:rw"
   
   backend:
+    image: anhtuansggd/petpal_backend:lastest
     build:
       context: backend
       dockerfile: Dockerfile
