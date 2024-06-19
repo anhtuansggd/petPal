@@ -1,4 +1,4 @@
-= API Documentation
+= PetPal API Documentation
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -40,7 +40,6 @@ include::{snippets}/register-user/response-fields.adoc[]
 === Register User - Conflict
 
 A `POST` request that fails to register a new user due to a conflict (e.g., username already exists).
-
 .Curl
 include::{snippets}/register-user-conflict/curl-request.adoc[]
 
@@ -241,3 +240,425 @@ include::{snippets}/update-caregiver-service-types/response-body.adoc[]
 
 // .ResponseField
 // include::{snippets}/update-caregiver-service-types/response-fields.adoc[]
+
+[[resources-get-user-profile]]
+=== Get User Profile
+
+A `GET` request to retrieve the profile of a user.
+
+.Curl
+include::{snippets}/get-user-profile/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-user-profile/http-request.adoc[]
+
+.Response
+include::{snippets}/get-user-profile/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-user-profile/response-body.adoc[]
+//
+// .ResponseField
+// include::{snippets}/get-user-profile/response-fields.adoc[]
+
+[[resources-get-user-pets-empty]]
+=== Get User Pets - Empty
+
+A `GET` request to retrieve the pets of a user when the user has no pets.
+
+.Curl
+include::{snippets}/get-user-pets-empty/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-user-pets-empty/http-request.adoc[]
+
+.Response
+include::{snippets}/get-user-pets-empty/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-user-pets-empty/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-user-pets-empty/response-fields.adoc[]
+
+.PathParameters
+include::{snippets}/get-user-pets-empty/path-parameters.adoc[]
+
+[[resources-register-pet]]
+=== Register Pet
+
+A `POST` request to register a new pet for a user.
+
+.Curl
+include::{snippets}/register-pet/curl-request.adoc[]
+
+.Request
+include::{snippets}/register-pet/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/register-pet/request-body.adoc[]
+
+.RequestField
+include::{snippets}/register-pet/request-fields.adoc[]
+
+.Response
+include::{snippets}/register-pet/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/register-pet/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/register-pet/response-fields.adoc[]
+
+[[resources-update-pet]]
+=== Update Pet
+
+A `PATCH` request to update the details of a pet.
+
+.Curl
+include::{snippets}/update-pet/curl-request.adoc[]
+
+.Request
+include::{snippets}/update-pet/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/update-pet/request-body.adoc[]
+
+// .RequestField
+// include::{snippets}/update-pet/request-fields.adoc[]
+
+.Response
+include::{snippets}/update-pet/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/update-pet/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/update-pet/response-fields.adoc[]
+
+[[resources-delete-pet]]
+=== Delete Pet
+
+A `DELETE` request to remove a pet from the system.
+
+.Curl
+include::{snippets}/delete-pet/curl-request.adoc[]
+
+.Request
+include::{snippets}/delete-pet/http-request.adoc[]
+
+.Response
+include::{snippets}/delete-pet/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/delete-pet/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/delete-pet/response-fields.adoc[]
+
+[[resources-create-contract]]
+=== Create Contract
+
+A `POST` request to create a new contract between a pet owner and a caregiver.
+
+.Curl
+include::{snippets}/create-contract/curl-request.adoc[]
+
+.Request
+include::{snippets}/create-contract/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/create-contract/request-body.adoc[]
+
+.RequestField
+include::{snippets}/create-contract/request-fields.adoc[]
+
+.Response
+include::{snippets}/create-contract/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/create-contract/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/create-contract/response-fields.adoc[]
+
+[[resources-accept-contract]]
+=== Accept Contract
+
+A `PATCH` request to accept an existing contract.
+
+.Curl
+include::{snippets}/accept-contract/curl-request.adoc[]
+
+.Request
+include::{snippets}/accept-contract/http-request.adoc[]
+
+.Response
+include::{snippets}/accept-contract/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/accept-contract/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/accept-contract/response-fields.adoc[]
+
+[[resources-complete-contract]]
+=== Complete Contract
+
+A `PATCH` request to mark a contract as completed.
+
+.Curl
+include::{snippets}/complete-contract/curl-request.adoc[]
+
+.Request
+include::{snippets}/complete-contract/http-request.adoc[]
+
+.Response
+include::{snippets}/complete-contract/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/complete-contract/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/complete-contract/response-fields.adoc[]
+
+[[resources-confirm-pet-return]]
+=== Confirm Pet Return
+
+A `PATCH` request to confirm the return of a pet under a contract.
+
+.Curl
+include::{snippets}/confirm-pet-return/curl-request.adoc[]
+
+.Request
+include::{snippets}/confirm-pet-return/http-request.adoc[]
+
+.Response
+include::{snippets}/confirm-pet-return/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/confirm-pet-return/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/confirm-pet-return/response-fields.adoc[]
+
+[[resources-create-contract-with-missing-parameters]]
+=== Create Contract with Missing Parameters
+
+A `POST` request to create a contract that fails due to missing required parameters.
+
+.Curl
+include::{snippets}/create-contract-with-missing-parameters/curl-request.adoc[]
+
+.Request
+include::{snippets}/create-contract-with-missing-parameters/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/create-contract-with-missing-parameters/request-body.adoc[]
+
+// .RequestField
+// include::{snippets}/create-contract-with-missing-parameters/request-fields.adoc[]
+
+.Response
+include::{snippets}/create-contract-with-missing-parameters/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/create-contract-with-missing-parameters/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/create-contract-with-missing-parameters/response-fields.adoc[]
+
+[[resources-reject-contract]]
+=== Reject Contract
+
+A `PATCH` request to reject a contract.
+
+.Curl
+include::{snippets}/reject-contract/curl-request.adoc[]
+
+.Request
+include::{snippets}/reject-contract/http-request.adoc[]
+
+.Response
+include::{snippets}/reject-contract/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/reject-contract/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/reject-contract/response-fields.adoc[]
+
+[[resources-send-message]]
+=== Send Message
+
+A `POST` request to send a message between users.
+
+.Curl
+include::{snippets}/send-message/curl-request.adoc[]
+
+.Request
+include::{snippets}/send-message/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/send-message/request-body.adoc[]
+
+// .RequestField
+// include::{snippets}/send-message/request-fields.adoc[]
+
+.Response
+include::{snippets}/send-message/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/send-message/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/send-message/response-fields.adoc[]
+
+[[resources-get-messages]]
+=== Get Messages
+
+A `GET` request to retrieve messages between users.
+
+.Curl
+include::{snippets}/get-messages/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-messages/http-request.adoc[]
+
+.Response
+include::{snippets}/get-messages/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-messages/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-messages/response-fields.adoc[]
+
+[[resources-upload-pet-main-avatar]]
+=== Upload Pet Main Avatar
+
+A `POST` request to upload the main avatar for a pet.
+
+.Curl
+include::{snippets}/upload-pet-main-avatar/curl-request.adoc[]
+
+.Request
+include::{snippets}/upload-pet-main-avatar/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/upload-pet-main-avatar/request-body.adoc[]
+
+.Response
+include::{snippets}/upload-pet-main-avatar/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/upload-pet-main-avatar/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/upload-pet-main-avatar/response-fields.adoc[]
+
+[[resources-get-pet-main-avatar]]
+=== Get Pet Main Avatar
+
+A `GET` request to retrieve the main avatar of a pet.
+
+.Curl
+include::{snippets}/get-pet-main-avatar/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-pet-main-avatar/http-request.adoc[]
+
+.Response
+include::{snippets}/get-pet-main-avatar/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-pet-main-avatar/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-pet-main-avatar/response-fields.adoc[]
+
+[[resources-upload-pet-additional-images]]
+=== Upload Pet Additional Images
+
+A `POST` request to upload additional images for a pet.
+
+.Curl
+include::{snippets}/upload-pet-additional-images/curl-request.adoc[]
+
+.Request
+include::{snippets}/upload-pet-additional-images/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/upload-pet-additional-images/request-body.adoc[]
+
+.Response
+include::{snippets}/upload-pet-additional-images/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/upload-pet-additional-images/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/upload-pet-additional-images/response-fields.adoc[]
+
+[[resources-get-pet-additional-images]]
+=== Get Pet Additional Images
+
+A `GET` request to retrieve additional images of a pet.
+
+.Curl
+include::{snippets}/get-pet-additional-images/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-pet-additional-images/http-request.adoc[]
+
+.Response
+include::{snippets}/get-pet-additional-images/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-pet-additional-images/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-pet-additional-images/response-fields.adoc[]
+
+[[resources-upload-user-avatar]]
+=== Upload User Avatar
+
+A `POST` request to upload an avatar for a user.
+
+.Curl
+include::{snippets}/upload-user-avatar/curl-request.adoc[]
+
+.Request
+include::{snippets}/upload-user-avatar/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/upload-user-avatar/request-body.adoc[]
+
+.Response
+include::{snippets}/upload-user-avatar/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/upload-user-avatar/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/upload-user-avatar/response-fields.adoc[]
+
+[[resources-get-user-avatar]]
+=== Get User Avatar
+
+A `GET` request to retrieve the avatar of a user.
+
+.Curl
+include::{snippets}/get-user-avatar/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-user-avatar/http-request.adoc[]
+
+.Response
+include::{snippets}/get-user-avatar/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-user-avatar/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-user-avatar/response-fields.adoc[]
