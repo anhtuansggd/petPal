@@ -7,16 +7,237 @@
 :sectlinks:
 
 [[resources-account]]
-== Account
+== Intergration Test Flow
 Service to manage accounts.
 
-[[resources-account-delete]]
-=== Delete an account
+[[resources-auth-register]]
+=== Register User
 
-A `DELETE` request can be used to delete an account.
+A `POST` request can be used to register a new user.
+
+.Curl
+include::{snippets}/register-user/curl-request.adoc[]
 
 .Request
-include::../../target/snippets/delete-account/http-request.adoc[]
+include::{snippets}/register-user/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/register-user/request-body.adoc[]
+
+.RequestField
+include::{snippets}/register-user/request-fields.adoc[]
 
 .Response
-include::../../target/snippets/delete-account/http-response.adoc[]
+include::{snippets}/register-user/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/register-user/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/register-user/response-fields.adoc[]
+
+[[resources-auth-register-conflict]]
+=== Register User - Conflict
+
+A `POST` request that fails to register a new user due to a conflict (e.g., username already exists).
+
+.Curl
+include::{snippets}/register-user-conflict/curl-request.adoc[]
+
+.Request
+include::{snippets}/register-user-conflict/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/register-user-conflict/request-body.adoc[]
+
+// .RequestField
+// include::{snippets}/register-user-conflict/request-fields.adoc[]
+
+.Response
+include::{snippets}/register-user-conflict/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/register-user-conflict/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/register-user-conflict/response-fields.adoc[]
+
+[[resources-auth-register-bad-request]]
+=== Register User - Bad Request
+
+A `POST` request that fails to register a new user due to invalid or missing fields.
+
+.Curl
+include::{snippets}/register-user-bad-request/curl-request.adoc[]
+
+.Request
+include::{snippets}/register-user-bad-request/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/register-user-bad-request/request-body.adoc[]
+
+.Response
+include::{snippets}/register-user-bad-request/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/register-user-bad-request/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/register-user-bad-request/response-fields.adoc[]
+
+
+[[resources-auth-login]]
+=== Login User
+
+A `POST` request can be used to authenticate a user and retrieve a token.
+
+.Curl
+include::{snippets}/login-user/curl-request.adoc[]
+
+.Request
+include::{snippets}/login-user/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/login-user/request-body.adoc[]
+
+.RequestField
+include::{snippets}/login-user/request-fields.adoc[]
+
+.Response
+include::{snippets}/login-user/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/login-user/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/login-user/response-fields.adoc[]
+
+[[resources-auth-validate-token]]
+=== Validate Token
+
+A `POST` request to validate a user's authentication token.
+
+.Curl
+include::{snippets}/validate-token/curl-request.adoc[]
+
+.Request
+include::{snippets}/validate-token/http-request.adoc[]
+
+// .RequestBody
+// include::{snippets}/validate-token/request-body.adoc[]
+
+// .RequestField
+// include::{snippets}/validate-token/request-fields.adoc[]
+
+.Response
+include::{snippets}/validate-token/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/validate-token/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/validate-token/response-fields.adoc[]
+
+[[resources-update-caregiver-profile]]
+=== Update Caregiver Profile
+
+A `PATCH` request to update the profile of a caregiver.
+
+.Curl
+include::{snippets}/update-caregiver-profile/curl-request.adoc[]
+
+.Request
+include::{snippets}/update-caregiver-profile/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/update-caregiver-profile/request-body.adoc[]
+
+.RequestField
+include::{snippets}/update-caregiver-profile/request-fields.adoc[]
+
+.Response
+include::{snippets}/update-caregiver-profile/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/update-caregiver-profile/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/update-caregiver-profile/response-fields.adoc[]
+
+[[resources-set-caregiver-availability]]
+=== Set Caregiver Availability
+
+A `POST` request to set the availability of a caregiver.
+
+.Curl
+include::{snippets}/set-caregiver-availability/curl-request.adoc[]
+
+.Request
+include::{snippets}/set-caregiver-availability/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/set-caregiver-availability/request-body.adoc[]
+
+.RequestField
+include::{snippets}/set-caregiver-availability/request-fields.adoc[]
+
+.Response
+include::{snippets}/set-caregiver-availability/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/set-caregiver-availability/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/set-caregiver-availability/response-fields.adoc[]
+
+[[resources-update-caregiver-pet-types]]
+=== Update Caregiver Pet Types
+
+A `PATCH` request to update the pet types a caregiver can handle.
+
+.Curl
+include::{snippets}/update-caregiver-pet-types/curl-request.adoc[]
+
+.Request
+include::{snippets}/update-caregiver-pet-types/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/update-caregiver-pet-types/request-body.adoc[]
+
+.RequestField
+include::{snippets}/update-caregiver-pet-types/request-fields.adoc[]
+
+.Response
+include::{snippets}/update-caregiver-pet-types/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/update-caregiver-pet-types/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/update-caregiver-pet-types/response-fields.adoc[]
+
+[[resources-update-caregiver-service-types]]
+=== Update Caregiver Service Types
+
+A `PATCH` request to update the service types a caregiver can provide.
+
+.Curl
+include::{snippets}/update-caregiver-service-types/curl-request.adoc[]
+
+.Request
+include::{snippets}/update-caregiver-service-types/http-request.adoc[]
+
+.RequestBody
+include::{snippets}/update-caregiver-service-types/request-body.adoc[]
+
+.RequestField
+include::{snippets}/update-caregiver-service-types/request-fields.adoc[]
+
+.Response
+include::{snippets}/update-caregiver-service-types/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/update-caregiver-service-types/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/update-caregiver-service-types/response-fields.adoc[]

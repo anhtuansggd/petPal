@@ -5,19 +5,28 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,9 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
+@AutoConfigureRestDocs
 public class IntegrationTests {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext context;
+
+
 
 
     @Order(1)
@@ -52,7 +66,20 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("User register successfully"));
+                .andExpect(jsonPath("$.message").value("User register successfully"))
+                .andDo(document("register-user",
+                        requestFields(
+                                fieldWithPath("name").description("The name of the user"),
+                                fieldWithPath("phone").description("The phone number of the user"),
+                                fieldWithPath("email").description("The email of the user"),
+                                fieldWithPath("username").description("The username of the user"),
+                                fieldWithPath("password").description("The password of the user"),
+                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver (1) or not (0)")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("The success message")
+                        )
+                ));
     }
 
 
@@ -71,7 +98,12 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message").value("Account already existed"));
+                .andExpect(jsonPath("$.message").value("Account already existed"))
+                .andDo(document("register-user-conflict",
+                        responseFields(
+                                fieldWithPath("message").description("The error message indicating account already exists")
+                        )
+                ));
     }
 
     @Order(3)
@@ -88,7 +120,12 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Invalid or missing fields"));
+                .andExpect(jsonPath("$.message").value("Invalid or missing fields"))
+                .andDo(document("register-user-bad-request",
+                        responseFields(
+                                fieldWithPath("message").description("The error message indicating invalid or missing fields")
+                        )
+                ));
     }
 
     private static String jwtToken;
@@ -107,6 +144,20 @@ public class IntegrationTests {
         jwtToken = result.getResponse().getHeader(HttpHeaders.AUTHORIZATION);
         System.out.println(result.getResponse().getHeader(HttpHeaders.AUTHORIZATION));
         System.out.println(jwtToken);
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andDo(document("login-user",
+                        requestFields(
+                                fieldWithPath("username").description("The username of the user"),
+                                fieldWithPath("password").description("The password of the user")
+                        ),
+                        responseFields(
+                                fieldWithPath("username").description("The username of the logged-in user"),
+                                fieldWithPath("token").description("JWT token for authentication")
+                        )
+                ));
     }
 
     @Order(5)
@@ -117,9 +168,13 @@ public class IntegrationTests {
                         .param("token", jwtToken)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(true));
+                .andExpect(jsonPath("$").value(true))
+                .andDo(document("validate-token",
+                        responseFields(
+                                fieldWithPath("$").description("Validation result of the token")
+                        )
+                ));
     }
-
 
     @Order(6)
     @ParameterizedTest
@@ -129,15 +184,21 @@ public class IntegrationTests {
     })
     void testUpdateCaregiverProfile(Long caregiverId, double latitude, double longitude) throws Exception {
         String requestBody = String.format("{\n" +
-                "    \"latitude\": %f,\n" +
-                "    \"longitude\": %f\n" +
+                "    \"latitude\": 50.174,\n" +
+                "    \"longitude\": 8.74\n" +
                 "}", latitude, longitude);
 
         mockMvc.perform(patch("/api/users/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody)
                         .param("username", "caregiver" + caregiverId))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("update-caregiver-profile",
+                        requestFields(
+                                fieldWithPath("latitude").description("Latitude of the caregiver's location"),
+                                fieldWithPath("longitude").description("Longitude of the caregiver's location")
+                        )
+                ));
     }
 
     @Order(7)
@@ -157,7 +218,15 @@ public class IntegrationTests {
         mockMvc.perform(post("/api/caregivers/" + caregiverId + "/availability")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("set-caregiver-availability",
+                        requestFields(
+                                fieldWithPath("frequency").description("Frequency of availability"),
+                                fieldWithPath("daysOfWeek").description("Days of the week available"),
+                                fieldWithPath("startDate").description("Start date of availability"),
+                                fieldWithPath("endDate").description("End date of availability")
+                        )
+                ));
     }
 
     @Order(8)
@@ -177,7 +246,15 @@ public class IntegrationTests {
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petTypes").isArray())
-                .andExpect(jsonPath("$.petTypes", hasItems(typesArray)));
+                .andExpect(jsonPath("$.petTypes", hasItems(typesArray)))
+                .andDo(document("update-caregiver-pet-types",
+                        requestFields(
+                                fieldWithPath("petTypes").description("Array of pet types the caregiver can handle")
+                        ),
+                        responseFields(
+                                fieldWithPath("petTypes").description("Updated array of pet types")
+                        )
+                ));
     }
 
     @Order(9)
@@ -197,9 +274,16 @@ public class IntegrationTests {
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.serviceTypes").isArray())
-                .andExpect(jsonPath("$.serviceTypes", hasItems(typesArray)));
+                .andExpect(jsonPath("$.serviceTypes", hasItems(typesArray)))
+                .andDo(document("update-caregiver-service-types",
+                        requestFields(
+                                fieldWithPath("serviceTypes").description("Array of service types the caregiver can provide")
+                        ),
+                        responseFields(
+                                fieldWithPath("serviceTypes").description("Updated array of service types")
+                        )
+                ));
     }
-
 
     @Order(10)
     @Test
