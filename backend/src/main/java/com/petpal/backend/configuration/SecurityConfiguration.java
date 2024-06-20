@@ -45,6 +45,9 @@ public class SecurityConfiguration {
                     request.requestMatchers("/api/auth/**").permitAll()
                             .requestMatchers("/api/users/**").permitAll()
                             .requestMatchers("/api/pets/**").permitAll()
+                            .requestMatchers("/api/caregivers/**").permitAll()
+                            .requestMatchers("/api/contracts/**").permitAll()
+                            .requestMatchers("/api/chat/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .build();

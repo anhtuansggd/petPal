@@ -1,10 +1,15 @@
 package com.petpal.backend.controller;
 
+import com.petpal.backend.domain.Authority;
+import com.petpal.backend.domain.Caregiver;
 import com.petpal.backend.domain.User;
 import com.petpal.backend.dto.AuthCredentialsRequest;
+import com.petpal.backend.repository.AuthorityRepository;
+import com.petpal.backend.service.CaregiverService;
 import com.petpal.backend.service.UserService;
 import com.petpal.backend.utility.CustomPasswordEncoder;
 import com.petpal.backend.utility.JwtUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,9 +18,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,6 +40,11 @@ public class AuthController {
     @Autowired
     private CustomPasswordEncoder customPasswordEncoder;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+    @Autowired
+    private CaregiverService caregiverService;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
         //Check if user exist
@@ -47,11 +60,32 @@ public class AuthController {
                     .body(Map.of("message", "Invalid or missing fields"));
         }
 
+        List<Authority> authorityList = new ArrayList<>();
+        authorityList.add(new Authority("ROLE_PETOWNER"));
+        if(user.getIsCaregiver() == 1){
+            authorityList.add(new Authority("ROLE_CAREGIVER"));
+        }
+        user.setAuthorities(authorityList);
+
+
 
         //Save user and success reponse
         String encodedPassword = customPasswordEncoder.getPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
-        User savedUser = userService.save(user);
+        User savedUser = null;
+        if(user.getIsCaregiver() == 1){
+            Caregiver caregiver = new Caregiver(user);
+            savedUser = caregiverService.save(caregiver);
+        }else{
+            savedUser = userService.save(user);
+        }
+        if(savedUser != null){
+            for(GrantedAuthority grantedAuthority : user.getAuthorities()){
+                Authority authority = (Authority) grantedAuthority;
+                authority.setUser(savedUser);
+                authorityRepository.save(authority);
+            }
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "User register successfully"));
     }
