@@ -7,8 +7,8 @@
 :sectlinks:
 
 [[resources-account]]
-== Intergration Test Flow
-Service to manage accounts.
+== Account Management API
+This section of the API handles all operations related to user account management. It includes functionalities such as user registration, user authentication, and user profile updates. The API ensures secure handling of user credentials and provides necessary endpoints for account settings adjustments.
 
 [[resources-auth-register]]
 === Register User
@@ -240,6 +240,26 @@ include::{snippets}/update-caregiver-service-types/response-body.adoc[]
 
 // .ResponseField
 // include::{snippets}/update-caregiver-service-types/response-fields.adoc[]
+
+[[resources-search-caregivers]]
+=== Search Caregivers
+
+A `GET` request to search for caregivers based on specified criteria.
+
+.Curl
+include::{snippets}/search-caregivers/curl-request.adoc[]
+
+.Request
+include::{snippets}/search-caregivers/http-request.adoc[]
+
+.Response
+include::{snippets}/search-caregivers/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/search-caregivers/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/search-caregivers/response-fields.adoc[]
 
 [[resources-get-user-profile]]
 === Get User Profile
