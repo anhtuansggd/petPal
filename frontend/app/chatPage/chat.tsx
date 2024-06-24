@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
+import { Account, Message } from './interfaces'
 
-interface Message {
-  id: number
-  user: string
-  text: string
-  // timestamp: string
+interface ChatProps {
+  selectedAccount: Account | null
 }
 
-export default function Chat({ selectedAccount }) {
+export default function Chat({ selectedAccount }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState<string>('')
   const [user, setUser] = useState<string>('username')
@@ -21,10 +19,12 @@ export default function Chat({ selectedAccount }) {
 
     const newMessage = {user, text: input}
     try {
-      // const res = send message to server 
-      const res = {data: newMessage.text}
-      setMessages([...messages, {id: messages.length+1, user: selectedAccount.name, text: input}])
-      setInput('')
+      if (selectedAccount !== null) {
+        // const res = send message to server 
+        const res = {data: newMessage.text}
+        setMessages([...messages, {id: messages.length+1, user: selectedAccount.name, text: input}])
+        setInput('')
+      }
     }
     catch(error) {
       console.error('Error sending message', error)

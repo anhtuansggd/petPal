@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Account, Message } from './interfaces'
 
-export default function ChatSideBar({ accounts, onAccountSelect }) {
+interface ChatSideBarProps {
+  accounts: Account[]
+  onAccountSelect: (account: Account) => void
+}
+
+export default function ChatSideBar({ accounts, onAccountSelect }: ChatSideBarProps) {
   const [searchInput, setSearchInput] = useState<string>('')
 
   return (
