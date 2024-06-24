@@ -2,7 +2,7 @@
 import React from "react";
 import { Input, Button } from "@material-tailwind/react";
 
-export default function Test() {
+export default function Info() {
   return (
     <div className=" w-8/12 mx-auto flex flex-col md:flex-row">
       <div className="p-6">
