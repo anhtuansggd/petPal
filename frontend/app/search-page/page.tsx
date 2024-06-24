@@ -1,4 +1,3 @@
-import NavBar from "../components/nav-bar";
 import FAQ from "./faq";
 import SearchBar from "./search-bar";
 import Test from "./test";
