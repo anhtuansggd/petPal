@@ -19,6 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+
       <head>
         <link
           rel="stylesheet"
@@ -29,6 +30,8 @@ export default function RootLayout({
         <NavBar />
         {children}
         <Footer />
+
+    
       </body>
     </html>
   );
