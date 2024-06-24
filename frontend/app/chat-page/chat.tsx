@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Account, Message } from "./interfaces";
-// import { error } from "console";
 
 interface ChatProps {
   selectedAccount: Account | null;
