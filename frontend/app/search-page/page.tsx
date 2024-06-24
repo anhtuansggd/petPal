@@ -4,15 +4,10 @@ import Test from "./test";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <SearchBar />
-<<<<<<< HEAD
       <FAQ />
       {/* <Test /> */}
-=======
-      {/* <FAQ /> */}
-      <Test />
->>>>>>> main
-    </main>
+    </div>
   );
 }
