@@ -5,12 +5,12 @@ import com.petpal.backend.domain.User;
 import com.petpal.backend.dto.PetRegistration;
 import com.petpal.backend.repository.PetRepository;
 import com.petpal.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
