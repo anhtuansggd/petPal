@@ -1,13 +1,9 @@
 "use client";
 
-import { ACTION } from "next/dist/client/components/app-router-headers";
 import Chat from "./chat";
 import ChatSideBar from "./chatSideBar";
 import { useState, useEffect } from "react";
-
-interface Account {
-  name: string;
-}
+import { Account } from "./interfaces";
 
 export default function ChatPage() {
   const [accounts, setAccounts] = useState<Account[]>([
@@ -15,9 +11,9 @@ export default function ChatPage() {
     { name: "bonbon" },
     { name: "bebe" },
   ]);
-  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
-  const onAccountSelect = (account: any) => {
+  const onAccountSelect = (account: Account) => {
     setSelectedAccount(account);
   };
 

@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
+import { Account, Message } from "./interfaces";
 
-export default function ChatSideBar({ accounts, onAccountSelect }) {
+interface ChatSideBarProps {
+  accounts: Account[];
+  onAccountSelect: (account: Account) => void;
+}
+
+export default function ChatSideBar({
+  accounts,
+  onAccountSelect,
+}: ChatSideBarProps) {
   const [searchInput, setSearchInput] = useState<string>("");
 
   return (
@@ -16,7 +25,7 @@ export default function ChatSideBar({ accounts, onAccountSelect }) {
       />
 
       <div className="w-64 grow bg-gray-100 flex-col overflow-y-scroll">
-        {accounts.map((account: any) => (
+        {accounts.map((account) => (
           <div
             key={account.name}
             className="p-4 cursor-pointer hover:bg-gray-200"

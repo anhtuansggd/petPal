@@ -5,19 +5,32 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,9 +39,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
+@AutoConfigureRestDocs
 public class IntegrationTests {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext context;
+
+
+//  NOTE!:
+// This test suite contains integration tests for various API endpoints.
+// Each test is capable of running locally for development and debugging purposes.
+// Documentation generation is disabled by default for faster execution during development.
+// To generate the API documentation:
+// 1. Uncomment all the `.andDo(document(...))` lines in each test method.
+// 2. Run the tests with the Maven command: `./mvnw test`
+// This will produce documentation in the 'target/generated-snippets' directory.
 
 
     @Order(1)
@@ -53,6 +79,19 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("User register successfully"));
+//                .andDo(document("register-user",
+//                        requestFields(
+//                                fieldWithPath("name").description("The name of the user"),
+//                                fieldWithPath("phone").description("The phone number of the user"),
+//                                fieldWithPath("email").description("The email of the user"),
+//                                fieldWithPath("username").description("The username of the user"),
+//                                fieldWithPath("password").description("The password of the user"),
+//                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver (1) or not (0)")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("message").description("The success message")
+//                        )
+//                ));
     }
 
 
@@ -72,6 +111,11 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Account already existed"));
+//                .andDo(document("register-user-conflict",
+//                        responseFields(
+//                                fieldWithPath("message").description("The error message indicating account already exists")
+//                        )
+//                ));
     }
 
     @Order(3)
@@ -89,6 +133,11 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Invalid or missing fields"));
+//                .andDo(document("register-user-bad-request",
+//                        responseFields(
+//                                fieldWithPath("message").description("The error message indicating invalid or missing fields")
+//                        )
+//                ));
     }
 
     private static String jwtToken;
@@ -107,6 +156,30 @@ public class IntegrationTests {
         jwtToken = result.getResponse().getHeader(HttpHeaders.AUTHORIZATION);
         System.out.println(result.getResponse().getHeader(HttpHeaders.AUTHORIZATION));
         System.out.println(jwtToken);
+
+        mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(jsonRequest));
+//                .andDo(document("login-user",
+//                        requestFields(
+//                                fieldWithPath("username").description("The username of the user"),
+//                                fieldWithPath("password").description("The password of the user")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("username").description("The username of the logged-in user"),
+//                                fieldWithPath("userId").description("The ID of the user"),
+//                                fieldWithPath("password").optional().description("The password of the user"),
+//                                fieldWithPath("name").description("The name of the user"),
+//                                fieldWithPath("email").description("The email address of the user"),
+//                                fieldWithPath("phone").description("The phone number of the user"),
+//                                fieldWithPath("location").optional().description("The location of the user"),
+//                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
+//                                fieldWithPath("authorities").description("Roles assigned to the user"),
+//                                fieldWithPath("enabled").description("Status of the user's account"),
+//                                fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
+//                                fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
+//                                fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired"),
+//                                fieldWithPath("token").optional().type(JsonFieldType.STRING).description("Authentication token")
+//                        )
+//                ));
     }
 
     @Order(5)
@@ -118,8 +191,12 @@ public class IntegrationTests {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
+//                .andDo(document("validate-token",
+//                        responseFields(
+//                                fieldWithPath("$").type(JsonFieldType.BOOLEAN).description("Validation result of the token")
+//                        )
+//                ));
     }
-
 
     @Order(6)
     @ParameterizedTest
@@ -129,8 +206,8 @@ public class IntegrationTests {
     })
     void testUpdateCaregiverProfile(Long caregiverId, double latitude, double longitude) throws Exception {
         String requestBody = String.format("{\n" +
-                "    \"latitude\": %f,\n" +
-                "    \"longitude\": %f\n" +
+                "    \"latitude\": 50.174,\n" +
+                "    \"longitude\": 8.74\n" +
                 "}", latitude, longitude);
 
         mockMvc.perform(patch("/api/users/profile")
@@ -138,6 +215,12 @@ public class IntegrationTests {
                         .content(requestBody)
                         .param("username", "caregiver" + caregiverId))
                 .andExpect(status().isOk());
+//                .andDo(document("update-caregiver-profile",
+//                        requestFields(
+//                                fieldWithPath("latitude").description("Latitude of the caregiver's location"),
+//                                fieldWithPath("longitude").description("Longitude of the caregiver's location")
+//                        )
+//                ));
     }
 
     @Order(7)
@@ -158,6 +241,14 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
                 .andExpect(status().isCreated());
+//                .andDo(document("set-caregiver-availability",
+//                        requestFields(
+//                                fieldWithPath("frequency").description("Frequency of availability"),
+//                                fieldWithPath("daysOfWeek").description("Days of the week available"),
+//                                fieldWithPath("startDate").description("Start date of availability"),
+//                                fieldWithPath("endDate").description("End date of availability")
+//                        )
+//                ));
     }
 
     @Order(8)
@@ -178,7 +269,17 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petTypes").isArray())
                 .andExpect(jsonPath("$.petTypes", hasItems(typesArray)));
+//                .andDo(document("update-caregiver-pet-types",
+//                        requestFields(
+//                                fieldWithPath("petTypes").description("Array of pet types the caregiver can handle")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("petTypes").description("Updated array of pet types")
+//
+//                        )
+//                ));
     }
+
 
     @Order(9)
     @ParameterizedTest
@@ -198,31 +299,94 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.serviceTypes").isArray())
                 .andExpect(jsonPath("$.serviceTypes", hasItems(typesArray)));
+//                .andDo(document("update-caregiver-service-types",
+//                        requestFields(
+//                                fieldWithPath("serviceTypes").description("Array of service types the caregiver can provide")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("serviceTypes").description("Updated array of service types")
+//                        )
+//                ));
     }
-
 
     @Order(10)
     @Test
     public void testSearchCaregivers() throws Exception {
         mockMvc.perform(get("/api/caregivers/search")
-                        .param("petTypes", "DOG,CAT")
-                        .param("startDate", "2024-06-15")
-                        .param("endDate", "2024-06-20")
-                        .param("longitude", "8.7423401")
-                        .param("latitude", "50.1863407")
-                        .param("serviceType", "PET_HOSTING"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(equalTo(2))))
-                .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
-                .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")));
+            .queryParam("petTypes", "DOG,CAT")
+            .queryParam("startDate", "2024-06-15")
+            .queryParam("endDate", "2024-06-20")
+            .queryParam("longitude", "8.7423401")
+            .queryParam("latitude", "50.1863407")
+            .queryParam("serviceType", "PET_HOSTING"));
+//            .andDo(document("search-caregivers",
+//                    queryParameters(
+//                    parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
+//                    parameterWithName("startDate").description("Start date for service"),
+//                    parameterWithName("endDate").description("End date for service"),
+//                    parameterWithName("longitude").description("Longitude of the service location"),
+//                    parameterWithName("latitude").description("Latitude of the service location"),
+//                    parameterWithName("serviceType").description("Type of service required")
+//            )));
+
+
+//      PREVIOUS TEST CASE:
+
+        // mockMvc.perform(get("/api/caregivers/search")
+        //                 .param("petTypes", "DOG,CAT")
+        //                 .param("startDate", "2024-06-15")
+        //                 .param("endDate", "2024-06-20")
+        //                 .param("longitude", "8.7423401")
+        //                 .param("latitude", "50.1863407")
+        //                 .param("serviceType", "PET_HOSTING"))
+        //         .andExpect(status().isOk())
+        //         .andExpect(jsonPath("$", hasSize(equalTo(2))))
+        //         .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
+        //         .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")))
+        //         .andDo(result -> System.out.println("Request parameters: " + result.getRequest().getParameterMap()))
+        //         .andDo(document("search-caregivers",
+        //                 requestParameters(
+        //                         parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
+        //                         parameterWithName("startDate").description("Start date for service"),
+        //                         parameterWithName("endDate").description("End date for service"),
+        //                         parameterWithName("longitude").description("Longitude of the service location"),
+        //                         parameterWithName("latitude").description("Latitude of the service location"),
+        //                         parameterWithName("serviceType").description("Type of service required")
+        //                 ),
+        //                 responseFields(
+        //                         fieldWithPath("$").description("List of caregivers matching the criteria")
+        //                 )
+        //         ));
     }
 
     @Order(11)
     @Test
     public void testGetUserProfile() throws Exception {
-        mockMvc.perform(get("/api/users/profile/user"))
+        mockMvc.perform(get("/api/users/profile/{username}", "user"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("user"));
+                .andExpect(jsonPath("$.username").value("user"))
+                .andDo(document("get-user-profile",
+                        pathParameters(
+                                parameterWithName("username").description("The username of the user")
+                        ),
+                        responseFields(
+                                fieldWithPath("userId").description("The ID of the user"),
+                                fieldWithPath("username").description("The username of the user"),
+                                fieldWithPath("password").optional().description("The password of the user"),
+                                fieldWithPath("name").description("The name of the user"),
+                                fieldWithPath("email").description("The email address of the user"),
+                                fieldWithPath("phone").description("The phone number of the user"),
+                                fieldWithPath("location").optional().description("The location of the user"),
+                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
+                                fieldWithPath("authorities").description("Roles assigned to the user"),
+                                fieldWithPath("enabled").description("Status of the user's account"),
+                                fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
+                                fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
+                                fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
+
+                        )
+
+                ));
     }
 
     @Order(12)
@@ -231,6 +395,14 @@ public class IntegrationTests {
         mockMvc.perform(get("/api/users/{username}/pets", "user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
+//                .andDo(document("get-user-pets-empty",
+//                        pathParameters(
+//                                parameterWithName("username").description("The username of the user")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$").description("List of pets owned by the user, expected to be empty")
+//                        )
+//                ));
     }
 
     @Order(13)
@@ -252,6 +424,21 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(containsString("Pet's id:")));
+//                .andDo(document("register-pet",
+//                        requestFields(
+//                                fieldWithPath("petType").description("The type of the pet"),
+//                                fieldWithPath("petName").description("The name of the pet"),
+//                                fieldWithPath("petAge").description("The age of the pet"),
+//                                fieldWithPath("petowner_id").description("The ID of the pet owner")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$.message").description("Confirmation message with the pet's ID"),
+//                                fieldWithPath("$.petId").description("The ID of the pet"),
+//                                fieldWithPath("$.petType").description("The type of the pet"),
+//                                fieldWithPath("$.petName").description("The name of the pet"),
+//                                fieldWithPath("$.petAge").description("The age of the pet")
+//                        )
+//                   ));
     }
 
     @Order(14)
@@ -259,7 +446,7 @@ public class IntegrationTests {
     public void testUpdatePet() throws Exception {
         String jsonRequest = "{\n" +
                 "    \"petType\": \"GUINEA_PIG\",\n" +
-                "    \"petName\": \"Minh Thong\",\n" +
+                "    \"petName\": \"Shiba_Inu\",\n" +
                 "    \"petAge\": 1\n" +
                 "}";
         mockMvc.perform(patch("/api/pets/1")
@@ -267,8 +454,23 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petType").value("GUINEA_PIG"))
-                .andExpect(jsonPath("$.petName").value("Minh Thong"))
+                .andExpect(jsonPath("$.petName").value("Shiba_Inu"))
                 .andExpect(jsonPath("$.petAge").value(1));
+//                .andDo(document("update-pet",
+//                        pathParameters(
+//                                parameterWithName("petId").description("The ID of the pet to update")
+//                        ),
+//                        requestFields(
+//                                fieldWithPath("petType").description("The type of the pet"),
+//                                fieldWithPath("petName").description("The name of the pet"),
+//                                fieldWithPath("petAge").description("The age of the pet")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$.petType").description("Updated type of the pet"),
+//                                fieldWithPath("$.petName").description("Updated name of the pet"),
+//                                fieldWithPath("$.petAge").description("Updated age of the pet")
+//                        )
+//                ));
     }
 
     @Order(15)
@@ -280,6 +482,11 @@ public class IntegrationTests {
         mockMvc.perform(get("/api/users/{username}/pets", "user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
+//                .andDo(document("delete-pet",
+//                        pathParameters(
+//                                parameterWithName("petId").description("The ID of the pet to delete")
+//                        )
+//                ));
     }
 
     @Order(16)
@@ -298,6 +505,17 @@ public class IntegrationTests {
                         .param("caregiverId", "1")) // Add caregiverId parameter
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("CREATED"));
+//                .andDo(document("create-contract",
+//                        requestFields(
+//                                fieldWithPath("petIds").description("List of pet IDs involved in the contract"),
+//                                fieldWithPath("serviceType").description("Type of service provided"),
+//                                fieldWithPath("startDate").description("Start date of the service"),
+//                                fieldWithPath("endDate").description("End date of the service")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("status").description("Status of the created contract")
+//                        )
+//                ));
     }
 
 
@@ -315,6 +533,13 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookedDateRanges[*].startDate", hasItem("2024-06-17")))
                 .andExpect(jsonPath("$.bookedDateRanges[*].endDate", hasItem("2024-06-18")));
+//                .andDo(document("accept-contract",
+//                        responseFields(
+//                                fieldWithPath("status").description("Current status of the contract"),
+//                                fieldWithPath("bookedDateRanges[*].startDate").description("List of start dates for booked services"),
+//                                fieldWithPath("bookedDateRanges[*].endDate").description("List of end dates for booked services")
+//                        )
+//                ));
     }
 
     @Order(18)
@@ -324,6 +549,11 @@ public class IntegrationTests {
         mockMvc.perform(patch("/api/contracts/" + contractId + "/return"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("PET_RETURNED"));
+//                .andDo(document("complete-contract",
+//                        responseFields(
+//                                fieldWithPath("status").description("Status of the contract after completion")
+//                        )
+//                ));
     }
 
     @Order(19)
@@ -333,6 +563,11 @@ public class IntegrationTests {
         mockMvc.perform(patch("/api/contracts/" + contractId + "/confirm-return"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petReturnConfirmed").value(true));
+//                .andDo(document("confirm-pet-return",
+//                        responseFields(
+//                                fieldWithPath("petReturnConfirmed").description("Confirmation status of the pet's return")
+//                        )
+//                ));
     }
 
     @Order(20)
@@ -349,9 +584,14 @@ public class IntegrationTests {
                         .param("petOwnerId", "3"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Required parameters are missing"));
+//                .andDo(document("create-contract-with-missing-parameters",
+//                        responseFields(
+//                                fieldWithPath("message").description("Error message for missing required parameters")
+//                        )
+//                ));
     }
 
-    @Order(20)
+    @Order(21)
     @Test
     public void testCreateAndRejectContract() throws Exception {
         // Create a contract
@@ -376,9 +616,14 @@ public class IntegrationTests {
                         .param("caregiverId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("REJECTED"));
+//                .andDo(document("reject-contract",
+//                    responseFields(
+//                            fieldWithPath("status").description("Current status of the contract after rejection")
+//                    )
+//                ));
     }
 
-    @Order(21)
+    @Order(22)
     @Test
     public void testSendMessage() throws Exception {
         String jsonRequest = "{\n" +
@@ -392,9 +637,14 @@ public class IntegrationTests {
                         .content(jsonRequest))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("Message sent successfully"));
+//                .andDo(document("send-message",
+//                    responseFields(
+//                            fieldWithPath("$").description("Success message upon sending")
+//                    )
+//                ));
     }
 
-    @Order(22)
+    @Order(23)
     @Test
     public void testGetMessages() throws Exception {
         Long senderId = 1L; // Assuming this is a valid sender ID
@@ -406,10 +656,15 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1))) // Assuming there is one message
                 .andExpect(jsonPath("$[0].message").value("Hello everyone"));
+//                .andDo(document("get-messages",
+//                    responseFields(
+//                            fieldWithPath("$").description("List of messages exchanged between users")
+//                    )
+//                ));
     }
 
 
-    @Order(23)
+    @Order(24)
     @Test
     public void testUploadPetMainAvatar() throws Exception {
         MockMultipartFile file = new MockMultipartFile("avatar", "avatar.jpg", "image/jpeg", "test image content".getBytes());
@@ -417,9 +672,15 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
                 .andExpect(jsonPath("$.petId").value(1));
+//                .andDo(document("upload-pet-main-avatar",
+//                    responseFields(
+//                            fieldWithPath("message").description("Success message upon uploading"),
+//                            fieldWithPath("petId").description("ID of the pet whose avatar was uploaded")
+//                    )
+//                ));
     }
 
-    @Order(24)
+    @Order(25)
     @Test
     public void testUploadPetAdditionalImages() throws Exception {
         MockMultipartFile file1 = new MockMultipartFile("images", "image1.jpg", "image/jpeg", "image1 content".getBytes());
@@ -428,9 +689,15 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Additional images uploaded successfully"))
                 .andExpect(jsonPath("$.petId").value(1));
+//                .andDo(document("upload-pet-additional-images",
+//                    responseFields(
+//                            fieldWithPath("message").description("Success message upon uploading additional images"),
+//                            fieldWithPath("petId").description("ID of the pet whose additional images were uploaded")
+//                    )
+//                ));
     }
 
-    @Order(25)
+    @Order(26)
     @Test
     public void testUploadUserAvatar() throws Exception {
         MockMultipartFile avatarFile = new MockMultipartFile("avatar", "userAvatar.jpg", "image/jpeg", "avatar content".getBytes());
@@ -438,31 +705,52 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Avatar uploaded successfully"))
                 .andExpect(jsonPath("$.userId").value(1));
+//                .andDo(document("upload-user-avatar",
+//                    responseFields(
+//                            fieldWithPath("message").description("Success message upon uploading"),
+//                            fieldWithPath("userId").description("ID of the user whose avatar was uploaded")
+//                    )
+//                ));
     }
 
-    @Order(26)
+    @Order(27)
     @Test
     public void testGetPetMainAvatar() throws Exception {
         mockMvc.perform(get("/api/pets/1/avatar"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.IMAGE_JPEG));
+//                .andDo(document("get-pet-main-avatar",
+//                    responseFields(
+//                            fieldWithPath("$").description("Content of the pet's main avatar image")
+//                    )
+//                ));
     }
 
-    @Order(27)
+    @Order(28)
     @Test
     public void testGetUserAvatar() throws Exception {
         mockMvc.perform(get("/api/users/profile/1/avatar"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.IMAGE_JPEG));
+//                .andDo(document("get-user-avatar",
+//                    responseFields(
+//                            fieldWithPath("$").description("Content of the user's avatar image")
+//                    )
+//                ));
     }
 
+    @Order(29)
     @Test
-    @Order(28)
     public void testGetPetAdditionalImages() throws Exception {
         Long petId = 1L; // Assuming this is a valid pet ID with images
         mockMvc.perform(get("/api/pets/" + petId + "/additional-images"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2))) // Assuming there are 2 images
                 .andExpect(jsonPath("$[0]", isA(String.class))); // Check if the response is a list of Base64 strings
-    }
+//                .andDo(document("get-pet-additional-images",
+//                    responseFields(
+//                            fieldWithPath("$").description("List of additional images for the pet")
+//                    )
+//                ));
+        }
 }

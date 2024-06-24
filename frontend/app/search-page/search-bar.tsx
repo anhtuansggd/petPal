@@ -2,8 +2,9 @@
 
 import { Input } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
+import Link from "next/link";
+import Image from "next/image";
 
-export { Input, Button };
 export default function SearchBar() {
   return (
     <div className="container mx-auto mt-10">
@@ -46,6 +47,20 @@ export default function SearchBar() {
           {" "}
           <Button className="bg-primary-dark-green">Search</Button>
         </div>
+      </div>
+
+      <div className="w-9/12 mt-12 mx-auto">
+        <Link href={"/sitter-info"}>
+          <Image
+            src="/sitter1.jpg"
+            width="0"
+            height="0"
+            sizes="100vw"
+            style={{ width: "100%", height: "auto" }}
+            alt="Map image"
+            className="rounded"
+          />
+        </Link>
       </div>
     </div>
   );
