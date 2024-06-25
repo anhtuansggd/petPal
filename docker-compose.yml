@@ -54,6 +54,9 @@ services:
     depends_on:
       - webserver
       - backend
+    volumes:
+    - ./frontend:/app
+    user: nextjs
     
 #PERSISTENT VOLUMES
 volumes:
