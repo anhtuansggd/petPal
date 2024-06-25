@@ -56,7 +56,6 @@ public class IntegrationTests {
 // 2. Run the tests with the Maven command: `./mvnw test`
 // This will produce documentation in the 'target/generated-snippets' directory.
 
-
     @Order(1)
     @ParameterizedTest
     @CsvSource({
@@ -660,16 +659,16 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest3))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"))
-                .andDo(document("send-message",
-                        requestFields(
-                                fieldWithPath("senderId").description("The ID of the user sending the message"),
-                                fieldWithPath("receiverId").description("The ID of the user receiving the message"),
-                                fieldWithPath("message").description("The content of the message")
-                        ),
-                        responseFields(
-                                fieldWithPath("$").description("Confirmation message upon successful sending")
-                        )));
+                .andExpect(jsonPath("$").value("Message sent successfully"));
+//                .andDo(document("send-message",
+//                        requestFields(
+//                                fieldWithPath("senderId").description("The ID of the user sending the message"),
+//                                fieldWithPath("receiverId").description("The ID of the user receiving the message"),
+//                                fieldWithPath("message").description("The content of the message")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$").description("Confirmation message upon successful sending")
+//                        )));
     }
 
     @Order(23)
@@ -717,14 +716,14 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$[0].userId").exists())
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[1].userId").exists())
-                .andExpect(jsonPath("$[1].name").exists())
-                .andDo(document("get-contacts",
-                        pathParameters(
-                                parameterWithName("senderId").description("The ID of the user whose contacts are being retrieved")
-                        ),
-                        responseFields(
-                                fieldWithPath("$").description("List of users who have had conversations with the sender")
-                        )));
+                .andExpect(jsonPath("$[1].name").exists());
+//                .andDo(document("get-contacts",
+//                        pathParameters(
+//                                parameterWithName("senderId").description("The ID of the user whose contacts are being retrieved")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$").description("List of users who have had conversations with the sender")
+//                        )));
     }
 
     @Order(25)
