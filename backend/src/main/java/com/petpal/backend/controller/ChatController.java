@@ -38,4 +38,15 @@ public class ChatController {
         List<Message> messages = chatMessageRepository.findBySenderAndReceiver(sender, receiver);
         return ResponseEntity.ok(messages);
     }
+
+    @GetMapping("/contacts/{senderId}")
+    public ResponseEntity<List<User>> getContacts(@PathVariable Long senderId) {
+        User sender = userRepository.findById(senderId).orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println(sender);
+        List<User> contacts = chatMessageRepository.findDistinctReceiverBySender(sender);
+        for (User contact : contacts) {
+            System.out.println(contact);
+        }
+        return ResponseEntity.ok(contacts);
+    }
 }

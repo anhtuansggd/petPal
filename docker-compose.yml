@@ -46,6 +46,7 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
+    # 
     ports:
       - 3000
     depends_on:
@@ -64,7 +65,6 @@ services:
       - frontend
     command: 
       - certonly
-      - --test-cert
       - --webroot 
       - -w 
       - /var/www/certbot
@@ -89,8 +89,6 @@ services:
     depends_on:
       - ssl-service
       - frontend
-
-  
 #PERSISTENT VOLUMES
 volumes:
   petpalDB:
