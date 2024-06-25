@@ -28,5 +28,5 @@ USER nextjs
 CMD ["npm", "run", "start"]
 
 # Expose the port the app runs on
-EXPOSE 3000
+# EXPOSE 3000
 #docker run -i --entrypoint /bin/sh -p 3000:3000 --network db-nework --name frContainer front-end
