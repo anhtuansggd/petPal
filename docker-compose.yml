@@ -42,18 +42,13 @@ services:
     depends_on:
       - petpalDB
 
-  webserver:
-    image: nginx:1.27.0-alpine3.19
-
   frontend:
     build:
       context: frontend
       dockerfile: Dockerfile
-    # 
     ports:
       - 3000
     depends_on:
-      - webserver
       - backend
     volumes:
     - ./frontend:/app
