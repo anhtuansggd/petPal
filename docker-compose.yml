@@ -63,18 +63,28 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     depends_on:
       - frontend
-    command: 
-      - certonly
-      - --webroot 
-      - -w 
-      - /var/www/certbot
-      - --email=anhtuan.sggd@gmail.com 
-      - -d 
-      - softwares.systems
-      - -d 
-      - www.softwares.systems 
-      - --agree-tos
-      - --no-eff-email
+    command:
+      - renew
+      # Certonly command did not run due to 'chicken and egg' problem:
+      # Nginx need the certificate, but Certbot needs access on Nginx cert folder 
+      #
+      # -> solution: comment block that use https 443 in nginx.conf
+      #              then restart nginx, and generate initial cert with command:
+      # 'certbot certonly --webroot -w /var/www/certbot --email anhtuan.sggd@gmail.com -d softwares.systems -d www.softwares.systems --agree-tos --no-eff-email --force-renewal'
+      #              now the cert is generated and the commented code in nginx.conf can be uncommented
+      #
+      #
+      #- certonly
+      #- --webroot 
+      #- -w 
+      #- /var/www/certbot
+      #- --email=anhtuan.sggd@gmail.com 
+      #- -d 
+      #- softwares.systems
+      #- -d 
+      #- www.softwares.systems 
+      #- --agree-tos
+      #- --no-eff-email
 
   nginx:
     image: nginx:1.27.0-alpine3.19
