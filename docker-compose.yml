@@ -49,8 +49,9 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
+    # 
     ports:
-      - 80:3000
+      - 3000
     depends_on:
       - webserver
       - backend
@@ -58,6 +59,17 @@ services:
     - ./frontend:/app
     user: nextjs
     
+
+  nginx:
+    image: nginx:1.27.0-alpine3.19
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+
 #PERSISTENT VOLUMES
 volumes:
   petpalDB:
