@@ -56,6 +56,11 @@ public class IntegrationTests {
 // 2. Run the tests with the Maven command: `./mvnw test`
 // This will produce documentation in the 'target/generated-snippets' directory.
 
+//  Note that if you only uncomment the andDo() when you want to generate the adoc file
+//  If you uncomment the andDo() and run the IntegrationTest, it will most likely give the error 
+//      because the response feild of the test and the adoc file is not the same, the test only need the
+//      expected response to be the same to pass, but the response of the adoc file is every data related.
+
     @Order(1)
     @ParameterizedTest
     @CsvSource({
