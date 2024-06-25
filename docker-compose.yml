@@ -50,6 +50,9 @@ services:
       - 80:3000
     depends_on:
       - backend
+    volumes:
+    - ./frontend:/app
+    user: nextjs
     
 #PERSISTENT VOLUMES
 volumes:
