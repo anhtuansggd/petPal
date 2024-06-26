@@ -41,6 +41,8 @@ public class ContractService {
         contract.setServiceType(request.getServiceType().toString());
         contract.setStartDate(request.getStartDate());
         contract.setEndDate(request.getEndDate());
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(contract.getStartDate(), contract.getEndDate());
+        contract.setPrice(daysBetween * 20);
         contract.setStatus("CREATED");
 
         contract = contractRepository.save(contract);

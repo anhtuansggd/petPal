@@ -652,19 +652,19 @@ public class IntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 1"));
 
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest2))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 2"));
 
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest3))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 3"));
 //                .andDo(document("send-message",
 //                        requestFields(
 //                                fieldWithPath("senderId").description("The ID of the user sending the message"),
