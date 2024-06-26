@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Account, Message } from "./interfaces";
+import ajax from "../services/fetchService"
 
 interface ChatProps {
   selectedAccount: Account | null;
@@ -27,6 +28,14 @@ export default function Chat({ selectedAccount }: ChatProps) {
           { id: messages.length + 1, user: selectedAccount.name, text: input },
         ]);
         setInput("");
+
+        ajax("http://localhost:8081/api/chat/send", "POST", {
+          "senderId": 1,
+          "receiverId": 2,
+          "message": "another one bites the dust"
+        }).then(() => {
+          console.log('huh')
+        })
       }
     } catch {}
   };
