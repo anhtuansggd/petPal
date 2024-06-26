@@ -29,7 +29,7 @@ export default function Chat({ selectedAccount }: ChatProps) {
         ]);
         setInput("");
 
-        ajax("http://localhost:8081/api/chat/send", "POST", {
+        ajax("api/chat/send", "POST", {
           "senderId": 1,
           "receiverId": 2,
           "message": "another one bites the dust"
