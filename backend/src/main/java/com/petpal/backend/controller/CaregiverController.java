@@ -106,6 +106,7 @@ public class CaregiverController {
     public ResponseEntity<?> updateCaregiverServiceTypes(@PathVariable Long caregiverId, @RequestBody List<ServiceTypeEnum> serviceTypes) {
         try {
             Caregiver updatedCaregiver = caregiverService.updateServiceTypes(caregiverId, serviceTypes);
+            updatedCaregiver.setPassword(null);
             return ResponseEntity.ok(updatedCaregiver);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
