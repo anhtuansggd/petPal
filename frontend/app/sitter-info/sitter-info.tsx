@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Input, Button } from "@material-tailwind/react";
-
+import Link from "next/link";
 export default function Info() {
   return (
     <div className=" w-8/12 mx-auto flex flex-col md:flex-row">
@@ -81,7 +81,9 @@ export default function Info() {
             </div>
           </div>
           <div>
-            <Button className="bg-primary-dark-green">Contact Shannon</Button>
+            <Link href={"/chat-page"}>
+              <Button className="bg-primary-dark-green">Contact Shannon</Button>
+            </Link>
           </div>
         </div>
         <div className="mt-6">
