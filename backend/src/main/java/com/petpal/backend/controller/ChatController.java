@@ -38,6 +38,7 @@ public class ChatController {
         return ResponseEntity.ok(messages);
     }
 
+    @Transactional
     @GetMapping("/contacts/{senderId}")
     public ResponseEntity<?> getContacts(@PathVariable Long senderId) {
         List<User> contacts = chatMessageService.getContacts(senderId);
