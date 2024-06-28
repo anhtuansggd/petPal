@@ -7,6 +7,8 @@ import com.petpal.backend.repository.ChatMessageRepository;
 import com.petpal.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class ChatMessageService {
         return messages;
     }
 
+    @Transactional
     public List<User> getContacts(Long senderId){
         User sender = userRepository.findById(senderId).orElseThrow(() -> new RuntimeException("User not found"));
         List<User> contacts = chatMessageRepository.findDistinctReceiverBySender(sender);
