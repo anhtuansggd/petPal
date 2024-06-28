@@ -8,6 +8,7 @@ import com.petpal.backend.repository.UserRepository;
 import com.petpal.backend.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
