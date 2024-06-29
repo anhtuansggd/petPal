@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
 import { Account, Message } from "./interfaces";
+import Avatar from 'react-avatar';
 
-interface ChatSideBarProps {
-  accounts: Account[];
-  onAccountSelect: (account: Account) => void;
-}
-
-export default function ChatSideBar({
-  accounts,
-  onAccountSelect,
-}: ChatSideBarProps) {
+export default function ChatSideBar({accounts, onAccountSelect}:any) {
   const [searchInput, setSearchInput] = useState<string>("");
 
   return (
@@ -25,13 +18,14 @@ export default function ChatSideBar({
       />
 
       <div className="w-64 grow bg-gray-100 flex-col overflow-y-scroll">
-        {accounts.map((account) => (
+        {accounts.map((account:any) => (
           <div
             key={account.name}
-            className="p-4 cursor-pointer hover:bg-gray-200"
+            className="p-4 cursor-pointer hover:bg-gray-200 flex-row"
             onClick={() => onAccountSelect(account)}
           >
-            {account.name}
+            <Avatar name={account.name} size="50" round={true} />
+            <span className="m-10">{account.name}</span>
           </div>
         ))}
       </div>

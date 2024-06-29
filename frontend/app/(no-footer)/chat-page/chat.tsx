@@ -1,22 +1,39 @@
 import { useState, useEffect } from "react";
 import { Account, Message } from "./interfaces";
-import ajax from "../services/fetchService"
+import ajax from "../../services/fetchService"
+import Avatar from 'react-avatar';
 
-interface ChatProps {
-  selectedAccount: Account | null;
-}
-
-export default function Chat({ selectedAccount }: ChatProps) {
+export default function Chat({ selectedAccount }: any) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [user, setUser] = useState<string>("username");
 
   useEffect(() => {
-    // fetch message
-  }, []);
+    ajax("api/chat/messages?senderId=1&receiverId=2", "GET").then((messages) => {
+      console.log('messages user 1 send to user 2 ', messages)
+    })
+    ajax("api/chat/messages?senderId=2&receiverId=1", "GET").then((messages) => {
+      console.log('messages user 2 send to user 1 ', messages)
+    })
+  }, [])
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
+
+    // try {
+    //   if (selectedAccount !== null) {
+    //     ajax("api/chat/send", "POST", {
+    //       "senderId": 1,
+    //       "receiverId": 2,
+    //       "message": input
+    //     }).then(() => {
+    //       console.log("user 1 send 'another one bites the dust' to user 2")
+    //       setInput("");
+    //     })
+    //   }
+    // } catch {
+
+    // }
 
     const newMessage = { user, text: input };
     try {
@@ -28,14 +45,6 @@ export default function Chat({ selectedAccount }: ChatProps) {
           { id: messages.length + 1, user: selectedAccount.name, text: input },
         ]);
         setInput("");
-
-        ajax("api/chat/send", "POST", {
-          "senderId": 1,
-          "receiverId": 2,
-          "message": "another one bites the dust"
-        }).then(() => {
-          console.log('huh')
-        })
       }
     } catch {}
   };
@@ -46,12 +55,16 @@ export default function Chat({ selectedAccount }: ChatProps) {
         <div className="flex-none p-4 bg-gray-100">{selectedAccount.name}</div>
 
         <div className="grow">
-          {messages.map((msg) => (
-            <div key={msg.id}>
-              <strong>{msg.user}: </strong>
-              {msg.text}
-            </div>
-          ))}
+          <div className="ml-2 flex-col-reverse">
+            {messages.map((msg) => (
+              <div key={msg.id} className="flex flex-row">
+                <Avatar name={msg.user} size="30" round={true} />
+                <div className="bg-gray-500 rounded-full rounded-bl-none ml-4">
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex">
