@@ -41,8 +41,8 @@ export default function Chat({ selectedAccount }: any) {
         // const res = send message to server
         const res = { data: newMessage.text };
         setMessages([
-          ...messages,
           { id: messages.length + 1, user: selectedAccount.name, text: input },
+          ...messages,
         ]);
         setInput("");
       }
@@ -54,17 +54,22 @@ export default function Chat({ selectedAccount }: any) {
       <div className="flex flex-col w-full">
         <div className="flex-none p-4 bg-gray-100">{selectedAccount.name}</div>
 
-        <div className="grow">
-          <div className="ml-2 flex-col-reverse">
-            {messages.map((msg) => (
-              <div key={msg.id} className="flex flex-row">
-                <Avatar name={msg.user} size="30" round={true} />
-                <div className="bg-gray-500 rounded-full rounded-bl-none ml-4">
-                  {msg.text}
-                </div>
+        <div className="grow ml-2 flex flex-col-reverse">
+          {messages.map((msg) => (
+            msg.user === "hassan" ?
+            <div key={msg.id} className="flex flex-row items-end m-2 self-end">
+              <div className="bg-[#01afa2] text-white rounded-full rounded-br-none mr-2 px-4 py-3">
+                {msg.text}
               </div>
-            ))}
-          </div>
+              <Avatar name={msg.user} size="30" round={true} />
+            </div> :
+            <div key={msg.id} className="flex flex-row items-end m-2">
+              <Avatar name={msg.user} size="30" round={true} />
+              <div className="bg-[#dce8ff] text-black rounded-full rounded-bl-none ml-2 px-4 py-3">
+                {msg.text}
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="flex">
