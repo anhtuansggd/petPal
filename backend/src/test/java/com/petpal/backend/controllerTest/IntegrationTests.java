@@ -648,6 +648,18 @@ public class IntegrationTests {
                 "    \"message\": \"Another message to receiver 2\"\n" +
                 "}";
 
+        String jsonRequest4 = "{\n" +
+                "    \"senderId\": 2,\n" +
+                "    \"receiverId\": 1,\n" +
+                "    \"message\": \"From 2 to 1\"\n" +
+                "}";
+
+        String jsonRequest5 = "{\n" +
+                "    \"senderId\": 3,\n" +
+                "    \"receiverId\": 2,\n" +
+                "    \"message\": \"From 3 to 2\"\n" +
+                "}";
+
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest1))
@@ -665,6 +677,18 @@ public class IntegrationTests {
                         .content(jsonRequest3))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("Message sent successfully: 3"));
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest4))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully: 4"));
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest5))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully: 5"));
 //                .andDo(document("send-message",
 //                        requestFields(
 //                                fieldWithPath("senderId").description("The ID of the user sending the message"),
@@ -704,9 +728,41 @@ public class IntegrationTests {
 //                ));
     }
 
+//    @Order(24)
+//    @Test
+//    public void testGetMessagesBetweenUsers() throws Exception {
+//        Long user1Id = 1L; // Assuming this is a valid user ID
+//        Long user2Id = 2L; // Assuming this is another valid user ID
+//
+//        mockMvc.perform(get("/api/chat/messages/between")
+//                        .param("user1Id", user1Id.toString())
+//                        .param("user2Id", user2Id.toString()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+//                .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
+//    }
 
-
+    @Test
     @Order(24)
+    public void testGetMessagesBetweenUsers() throws Exception {
+        Long user1Id = 1L; // Assuming this is a valid user ID
+        Long user2Id = 2L; // Assuming this is another valid user ID
+
+        MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
+                        .param("user1Id", user1Id.toString())
+                        .param("user2Id", user2Id.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+                .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
+    }
+
+
+
+    @Order(25)
     @Test
     public void testGetContacts() throws Exception {
         Long senderId = 1L; // Assuming this is a valid sender ID
@@ -731,7 +787,7 @@ public class IntegrationTests {
 //                        )));
     }
 
-    @Order(25)
+    @Order(26)
     @Test
     public void testUploadPetMainAvatar() throws Exception {
         MockMultipartFile file = new MockMultipartFile("avatar", "avatar.jpg", "image/jpeg", "test image content".getBytes());
@@ -747,7 +803,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(26)
+    @Order(27)
     @Test
     public void testUploadPetAdditionalImages() throws Exception {
         MockMultipartFile file1 = new MockMultipartFile("images", "image1.jpg", "image/jpeg", "image1 content".getBytes());
@@ -764,7 +820,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(27)
+    @Order(28)
     @Test
     public void testUploadUserAvatar() throws Exception {
         MockMultipartFile avatarFile = new MockMultipartFile("avatar", "userAvatar.jpg", "image/jpeg", "avatar content".getBytes());
@@ -780,7 +836,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(28)
+    @Order(29)
     @Test
     public void testGetPetMainAvatar() throws Exception {
         mockMvc.perform(get("/api/pets/1/avatar"))
@@ -793,7 +849,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(29)
+    @Order(30)
     @Test
     public void testGetUserAvatar() throws Exception {
         mockMvc.perform(get("/api/users/profile/1/avatar"))
@@ -806,7 +862,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(30)
+    @Order(31)
     @Test
     public void testGetPetAdditionalImages() throws Exception {
         Long petId = 1L; // Assuming this is a valid pet ID with images

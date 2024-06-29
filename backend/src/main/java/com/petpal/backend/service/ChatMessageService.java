@@ -40,6 +40,13 @@ public class ChatMessageService {
     }
 
     @Transactional
+    public List<Message> getMessagesBetweenUsers(Long user1Id, Long user2Id) {
+        User user1 = userRepository.findById(user1Id).orElseThrow(() -> new RuntimeException("User not found: " + user1Id));
+        User user2 = userRepository.findById(user2Id).orElseThrow(() -> new RuntimeException("User not found: " + user2Id));
+        return chatMessageRepository.findMessagesBetweenUsers(user1, user2);
+}
+
+    @Transactional
     public List<User> getContacts(Long senderId){
         User sender = userRepository.findById(senderId).orElseThrow(() -> new RuntimeException("User not found"));
         List<User> contacts = chatMessageRepository.findDistinctReceiverBySender(sender);

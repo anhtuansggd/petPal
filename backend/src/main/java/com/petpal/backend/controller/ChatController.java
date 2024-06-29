@@ -39,6 +39,16 @@ public class ChatController {
         return ResponseEntity.ok(messages);
     }
 
+    @GetMapping("/messages/between")
+    public ResponseEntity<?> getMessagesBetween(@RequestParam Long user1Id, @RequestParam Long user2Id) {
+        List<Message> messages = chatMessageService.getMessagesBetweenUsers(user1Id, user2Id);
+        messages.forEach(message -> {
+            message.getSender().setPassword(null);
+            message.getReceiver().setPassword(null);
+        });
+        return ResponseEntity.ok(messages);
+    }
+
     @Transactional
     @GetMapping("/contacts/{senderId}")
     public ResponseEntity<?> getContacts(@PathVariable Long senderId) {

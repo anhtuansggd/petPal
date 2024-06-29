@@ -14,4 +14,7 @@ public interface ChatMessageRepository extends JpaRepository<Message, Long> {
 
     @Query("SELECT DISTINCT m.receiver FROM Message m WHERE m.sender = :sender")
     List<User> findDistinctReceiverBySender(@Param("sender") User sender);
+
+    @Query("SELECT m FROM Message m WHERE (m.sender = :user1 AND m.receiver = :user2) OR (m.sender = :user2 AND m.receiver = :user1)")
+    List<Message> findMessagesBetweenUsers(@Param("user1") User user1, @Param("user2") User user2);
 }
