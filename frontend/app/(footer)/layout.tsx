@@ -1,11 +1,6 @@
-import type { Metadata } from "next";
 import "@/app/globals.css";
+import NavBar from "../components/nav-bar";
 import Footer from "../components/footer";
-
-export const metadata: Metadata = {
-  title: "PetPal",
-  description: " PetPal Programming Exercise",
-};
 
 export default function RootLayout({
   children,
@@ -14,6 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <>
+      <NavBar />
       {children}
       <Footer />
     </>

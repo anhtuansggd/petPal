@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
 import "@/app/globals.css";
-
-export const metadata: Metadata = {
-  title: "PetPal",
-  description: " PetPal Programming Exercise",
-};
+import NavBar from "../components/nav-bar";
 
 export default function NoFooterLayout({
   children,
@@ -12,8 +7,11 @@ export default function NoFooterLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      {children}
-    </>
+    <div className="flex flex-col w-screen h-screen">
+      <NavBar />
+      <div className="grow">
+        {children}
+      </div>
+    </div>
   );
 }
