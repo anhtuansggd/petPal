@@ -22,11 +22,8 @@ The API is organized into several key sections:
 Each section contains detailed information about the available endpoints, their functionalities, and the expected request and response structures. 
 Code snippets and examples are provided to demonstrate the usage of each endpoint.
 
-
-The API adheres to RESTful design principles and returns responses in JSON format. 
+The API adheres to RESTFUL design principles and returns responses in JSON format.
 Proper HTTP status codes are used to indicate the success or failure of each request.
-
-This documentation aims to provide developers with a clear understanding of how to integrate and interact with the PetPal API effectively.
 [[resources-auth-register]]
 === Register User
 
@@ -570,6 +567,29 @@ include::{snippets}/get-messages/response-body.adoc[]
 
 .ResponseField
 include::{snippets}/get-messages/response-fields.adoc[]
+
+[[resources-get-contacts]]
+=== Get Contacts
+
+A `GET` request to retrieve the contacts of a user.
+
+.Curl
+include::{snippets}/get-contacts/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-contacts/http-request.adoc[]
+
+.PathParameters
+include::{snippets}/get-contacts/path-parameters.adoc[]
+
+.Response
+include::{snippets}/get-contacts/http-response.adoc[]
+
+.ResponseBody
+include::{snippets}/get-contacts/response-body.adoc[]
+
+.ResponseField
+include::{snippets}/get-contacts/response-fields.adoc[]
 
 [[resources-upload-pet-main-avatar]]
 === Upload Pet Main Avatar

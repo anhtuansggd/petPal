@@ -2,7 +2,8 @@
 import React from "react";
 import { Input, Button } from "@material-tailwind/react";
 import Link from "next/link";
-export default function Info() {
+
+export default function SitterInfo() {
   return (
     <div className=" w-8/12 mx-auto flex flex-col md:flex-row">
       <div className="p-6">
