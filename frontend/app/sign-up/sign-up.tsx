@@ -57,8 +57,8 @@ export default function SignUp() {
           // Add any other relevant user data you want to store
         })
       );
-      const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
-      localStorage.setItem("sessionExpiration", expirationTime.toString());
+      // const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
+      // localStorage.setItem("sessionExpiration", expirationTime.toString());
 
       // Redirect to home page
       router.push("/home-page");

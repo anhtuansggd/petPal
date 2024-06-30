@@ -66,10 +66,12 @@ export default function NavBar() {
               <li>
                 {user ? (
                   <div className="avatar">
-                    <Avatar
-                      src="https://docs.material-tailwind.com/img/face-2.jpg"
-                      alt="avatar"
-                    />
+                    <Link href={"/user-profile"}>
+                      <Avatar
+                        src="https://docs.material-tailwind.com/img/face-2.jpg"
+                        alt="avatar"
+                      />
+                    </Link>
                   </div>
                 ) : (
                   <Button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">

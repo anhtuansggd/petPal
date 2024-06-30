@@ -19,7 +19,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-
       <head>
         <link
           rel="stylesheet"
@@ -27,11 +26,9 @@ export default function RootLayout({
         />
       </head>
       <body className={poppins.className}>
-        <NavBar />
+        {/* <NavBar /> */}
         {children}
         <Footer />
-
-    
       </body>
     </html>
   );

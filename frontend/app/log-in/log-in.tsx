@@ -36,6 +36,16 @@ export default function LogIn() {
       const data = await res.json();
       console.log("User Login:", data);
 
+      // Save user data and session to local storage
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          name: data.name,
+          email: data.email,
+          username: data.username,
+          // Add any other relevant user data you want to store
+        })
+      );
       // Save session to local storage
       localStorage.setItem("session", JSON.stringify(data));
 
@@ -107,7 +117,6 @@ export default function LogIn() {
               </div>
               <div className="flex items-center justify-between">
                 <Button
-                  // onClick={getData}
                   type="submit"
                   className="bg-primary-light-green hover:bg-primary-dark-green text-white font-bold py-2 px-4 rounded focus:outline-none duration-300 focus-shadow-outline"
                 >
