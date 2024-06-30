@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoidHN1ZHkiLCJhIjoiY2x0eWRpMHI1MGd2ejJpbzBla3JxNndmbiJ9.ICPd6DnmHNqmGN0P5-Sbmw';
@@ -83,10 +85,27 @@ const Map = () => {
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+    
+
     map.on('move', () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
+    });
+
+
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    });
+    
+    map.addControl(geocoder);
+    
+    geocoder.on('result', (e) => {
+      const { center, place_name } = e.result;
+      setLng(center[0]);
+      setLat(center[1]);
+      setZoom(14);
     });
 
     // Clean up on unmount
@@ -98,15 +117,15 @@ const Map = () => {
 
 
   return (
-      <div>
-        <div className='sidebarStyle'>
-          <div>
-            Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | <button onClick={locateUser}>Locate Me</button>
-          </div>
+    <div>
+      <div className='sidebarStyle'>
+        <div>
+          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | <button onClick={locateUser}>Locate Me</button>
         </div>
-
-        <div className='map-container' ref={mapContainerRef} style={{ width: '100%', height: '400px' }}/>
       </div>
+      <div id="geocoder" className="geocoder"></div>
+      <div className='map-container' ref={mapContainerRef} style={{ width: '100%', height: '400px' }}/>
+    </div>
   );
 };
 
