@@ -4,23 +4,26 @@ import { Input, Button } from "@material-tailwind/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Alert } from "@material-tailwind/react";
 
 // import getData from "../services/fetchService";
 
-export default function LogIn() {
+export default function Login() {
   const router = useRouter();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     const User = {
       username,
       password,
-    };
+    }
 
     try {
       const res = await fetch("http://localhost:8081/api/auth/login", {
@@ -39,15 +42,31 @@ export default function LogIn() {
       // Save session to local storage
       localStorage.setItem("session", JSON.stringify(data));
 
+      // // Save JWT Token to local storage
+      // const authToken = res.headers.get('Authorization');
+      // if (authToken) {
+      //   localStorage.setItem("jwtToken", authToken);
+      // } else {
+      //   console.error('No Authorization Token Found');
+      // }
+
+
       // Set session expiration
       const expirationTime = new Date().getTime() + 60 * 60 * 1000; // 60 minutes
       localStorage.setItem("sessionExpiration", expirationTime.toString());
 
       // Redirect to home page
       router.push("/home-page");
+      setAlertMessage('Login successful!');
+      setAlert(true);
+      setTimeout(() => setAlert(false), 1000);
+
     } catch (error) {
       console.error("Error during log-in session:", error);
-      // Handle error (e.g., show error message to user)
+      setAlertMessage('Login failed!');
+      setAlert(true);
+      setTimeout(() => setAlert(false), 1000);
+
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +74,11 @@ export default function LogIn() {
 
   return (
     <div className="w-8/12 mx-auto mt-12">
+      {alert && (
+        <Alert color={alertMessage.includes("successful") ? "green" : "red"}>
+          {alertMessage}
+        </Alert>
+      )}
       <div className="flex h-max flex-col md:flex-row items-center justify-between">
         <div className="md:w-1/2">
           <Image
@@ -72,9 +96,12 @@ export default function LogIn() {
               <div className="text-5xl text-primary-light-green font-bold">
                 <h1>Welcome back!</h1>
               </div>
+              {/* <p className="text-gray-600 mt-1">
+                Login with the data you entered during your registration.
+              </p> */}
             </div>
             <form
-              onSubmit={handleLogin}
+              onSubmit={handleSubmit}
               className="space-y-4 md:space-y-6"
               action="#"
             >
