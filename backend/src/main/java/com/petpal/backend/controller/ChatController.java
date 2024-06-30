@@ -50,9 +50,9 @@ public class ChatController {
     }
 
     @Transactional
-    @GetMapping("/contacts/{senderId}")
-    public ResponseEntity<?> getContacts(@PathVariable Long senderId) {
-        List<User> contacts = chatMessageService.getContacts(senderId);
+    @GetMapping("/contacts/{userId}")
+    public ResponseEntity<?> getContacts(@PathVariable Long userId) {
+        List<User> contacts = chatMessageService.getContacts(userId);
         return ResponseEntity.ok(contacts);
     }
 }

@@ -49,10 +49,8 @@ public class ChatMessageService {
 }
 
     @Transactional
-    public List<User> getContacts(Long senderId){
-        User sender = userRepository.findById(senderId).orElseThrow(() -> new RuntimeException("User not found"));
-        List<User> contacts = chatMessageRepository.findDistinctReceiverBySender(sender);
-        return contacts;
-
+    public List<User> getContacts(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return chatMessageRepository.findDistinctUsersByMessages(user);
     }
 }

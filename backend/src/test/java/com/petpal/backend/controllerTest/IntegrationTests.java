@@ -770,19 +770,48 @@ public class IntegrationTests {
     @Order(25)
     @Test
     public void testGetContacts() throws Exception {
-        Long senderId = 1L; // Assuming this is a valid sender ID
+        Long userId = 1L; // Assuming this is a valid user ID
 
-        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
+        mockMvc.perform(get("/api/chat/contacts/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThan(0))))
                 .andExpect(jsonPath("$[0].userId").exists())
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[1].userId").exists())
                 .andExpect(jsonPath("$[1].name").exists());
+//    @Test
+//    public void testGetContacts() throws Exception {
+//        Long userId = 3L; // Assuming this is a valid user ID
+//
+//        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{userId}", userId))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
+//                .andExpect(jsonPath("$[0].userId").exists())
+//                .andExpect(jsonPath("$[0].name").exists())
+//                .andExpect(jsonPath("$[1].userId").exists())
+//                .andExpect(jsonPath("$[1].name").exists())
+//                .andReturn();
+//
+//        // Print out the response content
+//        String jsonResponse = result.getResponse().getContentAsString();
+//        System.out.println("Contacts for User " + userId + ": " + jsonResponse);
+
+
+//    @Test
+//    public void testGetContacts() throws Exception {
+//        Long senderId = 1L; // Assuming this is a valid sender ID
+//
+//        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
+//                .andExpect(status().isOk())
+//                .andReturn();
+//
+//        mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
+//                .andExpect(jsonPath("$[0].userId").exists())
+//                .andExpect(jsonPath("$[0].name").exists())
+//                .andExpect(jsonPath("$[1].userId").exists())
+//                .andExpect(jsonPath("$[1].name").exists());
 //                .andDo(document("get-contacts",
 //                        pathParameters(
 //                                parameterWithName("senderId").description("The ID of the user whose contacts are being retrieved")
@@ -790,6 +819,7 @@ public class IntegrationTests {
 //                        responseFields(
 //                                fieldWithPath("$").description("List of users who have had conversations with the sender")
 //                        )));
+
     }
 
     @Order(26)
