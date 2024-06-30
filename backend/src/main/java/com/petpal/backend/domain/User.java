@@ -47,7 +47,6 @@ public class User implements UserDetails {
     private List<Authority> authorities = new ArrayList<>();
     @JsonIgnore
     @Column
-    @Lob
     private byte[] avatar;
 
     public User(Long userId, String username, String password, String name, String email, String phone, Location location, int isCaregiver, List<Contract> contracts, List<Pet> pets, List<Authority> authorities) {
