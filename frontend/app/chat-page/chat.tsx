@@ -1,34 +1,46 @@
 import { useState, useEffect } from "react";
-import { Account, Message } from "./interfaces";
+import ajax from "../services/fetchService"
+import { Avatar } from "@material-tailwind/react";
 
-interface ChatProps {
-  selectedAccount: Account | null;
-}
-
-export default function Chat({ selectedAccount }: ChatProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function Chat({ selectedAccount }: any) {
+  const [messages, setMessages] = useState<any>([]);
   const [input, setInput] = useState<string>("");
-  const [user, setUser] = useState<string>("username");
+
+  const fetchNewMessages = async () => {
+    try {
+      if (selectedAccount !== null) {
+        ajax(`api/chat/messages/between?user1Id=1&user2Id=${selectedAccount.userId}`, "GET").then((receivedMessages) => {
+          setMessages(receivedMessages)  
+        })   
+      }
+    } catch (err) {
+      console.log("Failed to fetch new messages", err)
+    }
+  }
 
   useEffect(() => {
-    // fetch message
-  }, []);
+    fetchNewMessages()
+    const id = setInterval(fetchNewMessages, 1000);
+    return () => clearInterval(id)
+  }, [selectedAccount])
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
 
-    const newMessage = { user, text: input };
     try {
       if (selectedAccount !== null) {
-        // const res = send message to server
-        const res = { data: newMessage.text };
-        setMessages([
-          ...messages,
-          { id: messages.length + 1, user: selectedAccount.name, text: input },
-        ]);
-        setInput("");
+        ajax("api/chat/send", "POST", {
+          "senderId": 1,
+          "receiverId": selectedAccount.userId,
+          "message": input
+        }).then(() => {
+          console.log(`user 1 send '${input}' to user ${selectedAccount.userId}`)
+          setInput("");
+        })
       }
-    } catch {}
+    } catch {
+      console.log("Failed to send message. Error connecting to the server")
+    }
   };
 
   return (
@@ -36,11 +48,20 @@ export default function Chat({ selectedAccount }: ChatProps) {
       <div className="flex flex-col w-full">
         <div className="flex-none p-4 bg-gray-100">{selectedAccount.name}</div>
 
-        <div className="grow">
-          {messages.map((msg) => (
-            <div key={msg.id}>
-              <strong>{msg.user}: </strong>
-              {msg.text}
+        <div className="grow ml-2 flex flex-col-reverse overflow-y-scroll h-0">
+          {messages.slice().reverse().map((msg:any) => (
+            msg.sender.userId === 1 ?
+            <div key={msg.id} className="flex flex-row items-end m-2 self-end">
+              <div className="bg-[#01afa2] text-white rounded-full rounded-br-none mr-2 px-4 py-3">
+                {msg.message}
+              </div>
+              <Avatar src="/chat-page/defaultAvatar.jpg" alt="avatar" size="sm"/>
+            </div> :
+            <div key={msg.id} className="flex flex-row items-end m-2">
+              <Avatar src="/chat-page/defaultAvatar.jpg" alt="avatar" size="sm"/>
+              <div className="bg-[#dce8ff] text-black rounded-full rounded-bl-none ml-2 px-4 py-3">
+                {msg.message}
+              </div>
             </div>
           ))}
         </div>

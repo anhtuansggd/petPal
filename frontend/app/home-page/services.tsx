@@ -39,9 +39,9 @@ export default function Services() {
         <h1>What Petpal offers?</h1>
       </div>
 
-      <div className="flex flex-row gap-4 justify-between mt-10">
+      <div className="flex lg:flex-row sm:flex-col gap-4 justify-between mt-10">
         {servicesData.map((service, index) => (
-          <div className="basis-1/3" key={index}>
+          <div className="xl:basis-1/3 sm:basis-1/2" key={index}>
             <Card className="mt-6">
               <CardHeader>
                 <Image
