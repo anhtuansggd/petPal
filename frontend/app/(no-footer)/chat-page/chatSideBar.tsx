@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Account, Message } from "./interfaces";
-import Avatar from 'react-avatar';
+import { Avatar } from "@material-tailwind/react";
 
 export default function ChatSideBar({accounts, onAccountSelect}:any) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -24,7 +24,7 @@ export default function ChatSideBar({accounts, onAccountSelect}:any) {
             className="p-4 cursor-pointer hover:bg-gray-200 flex-row"
             onClick={() => onAccountSelect(account)}
           >
-            <Avatar name={account.name} size="50" round={true} />
+            <Avatar src="/chat-page/defaultAvatar.jpg" alt="avatar" />
             <span className="m-10">{account.name}</span>
           </div>
         ))}
