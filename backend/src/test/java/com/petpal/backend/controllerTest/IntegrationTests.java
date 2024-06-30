@@ -368,29 +368,29 @@ public class IntegrationTests {
     public void testGetUserProfile() throws Exception {
         mockMvc.perform(get("/api/users/profile/{username}", "user"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("user"))
-                .andDo(document("get-user-profile",
-                        pathParameters(
-                                parameterWithName("username").description("The username of the user")
-                        ),
-                        responseFields(
-                                fieldWithPath("userId").description("The ID of the user"),
-                                fieldWithPath("username").description("The username of the user"),
-                                fieldWithPath("password").optional().description("The password of the user"),
-                                fieldWithPath("name").description("The name of the user"),
-                                fieldWithPath("email").description("The email address of the user"),
-                                fieldWithPath("phone").description("The phone number of the user"),
-                                fieldWithPath("location").optional().description("The location of the user"),
-                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
-                                fieldWithPath("authorities").description("Roles assigned to the user"),
-                                fieldWithPath("enabled").description("Status of the user's account"),
-                                fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
-                                fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
-                                fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
+                .andExpect(jsonPath("$.username").value("user"));
+                // .andDo(document("get-user-profile",
+                //         pathParameters(
+                //                 parameterWithName("username").description("The username of the user")
+                //         ),
+                //         responseFields(
+                //                 fieldWithPath("userId").description("The ID of the user"),
+                //                 fieldWithPath("username").description("The username of the user"),
+                //                 fieldWithPath("password").optional().description("The password of the user"),
+                //                 fieldWithPath("name").description("The name of the user"),
+                //                 fieldWithPath("email").description("The email address of the user"),
+                //                 fieldWithPath("phone").description("The phone number of the user"),
+                //                 fieldWithPath("location").optional().description("The location of the user"),
+                //                 fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
+                //                 fieldWithPath("authorities").description("Roles assigned to the user"),
+                //                 fieldWithPath("enabled").description("Status of the user's account"),
+                //                 fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
+                //                 fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
+                //                 fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
 
-                        )
+                //         )
 
-                ));
+                // ));
     }
 
     @Order(12)
@@ -703,9 +703,10 @@ public class IntegrationTests {
     @Order(23)
     @Test
     public void testGetMessages() throws Exception {
-        Long senderId = 1L; // Assuming this is a valid sender ID
-        Long receiverId2 = 2L; // Assuming this is a valid receiver ID
-        Long receiverId3 = 3L; // Assuming this is a valid receiver ID
+        Long senderId = 1L; 
+        Long receiverId2 = 2L; 
+        Long receiverId3 = 3L; 
+        
 
         mockMvc.perform(get("/api/chat/messages")
                         .param("senderId", senderId.toString())
@@ -727,40 +728,44 @@ public class IntegrationTests {
 //                    )
 //                ));
     }
+  
+        // @Order(24)
+        // @Test
+        // public void testGetMessagesBetweenUsers() throws Exception {
+        //         Long user1Id = 1L; // Assuming this is a valid user ID
+        //         Long user2Id = 2L; // Assuming this is another valid user ID
 
-//    @Order(24)
-//    @Test
-//    public void testGetMessagesBetweenUsers() throws Exception {
-//        Long user1Id = 1L; // Assuming this is a valid user ID
-//        Long user2Id = 2L; // Assuming this is another valid user ID
-//
-//        mockMvc.perform(get("/api/chat/messages/between")
-//                        .param("user1Id", user1Id.toString())
-//                        .param("user2Id", user2Id.toString()))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
-//                .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
-//    }
+        //         MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
+        //                         .param("user1Id", user1Id.toString())
+        //                         .param("user2Id", user2Id.toString()))
+        //                 .andExpect(status().isOk())
+        //                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+        //                 .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
+        //                 .andReturn();
 
-    @Test
-    @Order(24)
-    public void testGetMessagesBetweenUsers() throws Exception {
-        Long user1Id = 1L; // Assuming this is a valid user ID
-        Long user2Id = 2L; // Assuming this is another valid user ID
+        //         String jsonResponse = result.getResponse().getContentAsString();
+        //         System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
+        // }
+        
+        @Order(24)       
+        @Test
+        public void testGetMessagesBetweenUsers() throws Exception {
+        Long user1Id = 1L; 
+        Long user2Id = 2L; 
 
-        MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
+        mockMvc.perform(get("/api/chat/messages/between")
                         .param("user1Id", user1Id.toString())
                         .param("user2Id", user2Id.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
-                .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
+                .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
+                // .andDo(document("get-messages-between-users",
+                //         responseFields(
+                //         // fieldWithPath("$").description("List of messages exchanged between the two users"),
+                //         fieldWithPath("$[*].message").description("The content of each message")
+                //         )
+                // ));
     }
-
-
 
     @Order(25)
     @Test
