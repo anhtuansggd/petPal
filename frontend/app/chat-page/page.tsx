@@ -1,5 +1,5 @@
 "use client";
-import ajax from "../../services/fetchService"
+import ajax from "../services/fetchService"
 
 import Chat from "./chat";
 import ChatSideBar from "./chatSideBar";

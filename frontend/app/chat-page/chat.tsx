@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ajax from "../../services/fetchService"
+import ajax from "../services/fetchService"
 import { Avatar } from "@material-tailwind/react";
 
 export default function Chat({ selectedAccount }: any) {
