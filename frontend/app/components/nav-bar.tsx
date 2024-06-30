@@ -1,13 +1,21 @@
 "use client";
 
 import Image from "next/image";
-// import { useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { Button } from "@material-tailwind/react";
+import { Avatar, Button } from "@material-tailwind/react";
 
 export default function NavBar() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      setUser(JSON.parse(userData));
+      console.log(userData);
+    }
+  }, []);
   return (
     <>
       <div className="w-full h-20 bg-white z-50 sticky top-0 border-y">
@@ -56,13 +64,21 @@ export default function NavBar() {
                 <Link href="/">EN</Link>
               </li>
               <li>
-                <Button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">
-                  LogIn
-                </Button>
+                {user ? (
+                  <div className="avatar">
+                    <Link href={"/user-profile"}>
+                      <Avatar
+                        src="https://docs.material-tailwind.com/img/face-2.jpg"
+                        alt="avatar"
+                      />
+                    </Link>
+                  </div>
+                ) : (
+                  <Button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">
+                    <Link href={"/log-in"}>LogIn</Link>
+                  </Button>
+                )}
               </li>
-              {/* <li>
-                <Link href="/">AVATAR</Link>
-              </li> */}
             </ul>
           </div>
         </div>
