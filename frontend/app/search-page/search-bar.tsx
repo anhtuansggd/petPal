@@ -4,6 +4,7 @@ import { Input } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
 import Link from "next/link";
 import Image from "next/image";
+import Map from "../components/map"
 
 export default function SearchBar() {
   return (
@@ -50,7 +51,8 @@ export default function SearchBar() {
       </div>
 
       <div className="w-9/12 mt-12 mx-auto">
-        <Link href={"/sitter-info"}>
+        <Map/>
+        {/*<Link href={"/sitter-info"}>
           <Image
             src="/sitter1.jpg"
             width="0"
@@ -60,7 +62,7 @@ export default function SearchBar() {
             alt="Map image"
             className="rounded"
           />
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
