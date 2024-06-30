@@ -20,11 +20,13 @@ public class ChatMessageService {
     @Autowired
     private UserRepository userRepository;
 
+//  Line 27 and 29 will cause the password of the user change to null from the test case 22 in the IntegrationTest
+
     public Message saveMessage(MessageRequest messageRequest){
         User sender = userRepository.findById(messageRequest.getSenderId()).orElseThrow(() -> new RuntimeException("Sender not found"));
-        sender.setPassword(null);
+//        sender.setPassword(null);
         User receiver = userRepository.findById(messageRequest.getReceiverId()).orElseThrow(() -> new RuntimeException("Receiver not found"));
-        sender.setPassword(null);
+//        sender.setPassword(null);
         Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);

@@ -53,9 +53,6 @@ public class ChatController {
     @GetMapping("/contacts/{senderId}")
     public ResponseEntity<?> getContacts(@PathVariable Long senderId) {
         List<User> contacts = chatMessageService.getContacts(senderId);
-        for( User user : contacts){
-            user.setPassword(null);
-        }
         return ResponseEntity.ok(contacts);
     }
 }
