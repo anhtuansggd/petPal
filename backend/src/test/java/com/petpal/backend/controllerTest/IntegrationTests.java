@@ -98,7 +98,6 @@ public class IntegrationTests {
 //                ));
     }
 
-
     @Order(2)
     @Test
     public void testRegisteredUserThenReturnConflict() throws Exception {
@@ -284,7 +283,6 @@ public class IntegrationTests {
 //                ));
     }
 
-
     @Order(9)
     @ParameterizedTest
     @CsvSource({
@@ -335,32 +333,32 @@ public class IntegrationTests {
 
 
 //      PREVIOUS TEST CASE:
-
-        // mockMvc.perform(get("/api/caregivers/search")
-        //                 .param("petTypes", "DOG,CAT")
-        //                 .param("startDate", "2024-06-15")
-        //                 .param("endDate", "2024-06-20")
-        //                 .param("longitude", "8.7423401")
-        //                 .param("latitude", "50.1863407")
-        //                 .param("serviceType", "PET_HOSTING"))
-        //         .andExpect(status().isOk())
-        //         .andExpect(jsonPath("$", hasSize(equalTo(2))))
-        //         .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
-        //         .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")))
-        //         .andDo(result -> System.out.println("Request parameters: " + result.getRequest().getParameterMap()))
-        //         .andDo(document("search-caregivers",
-        //                 requestParameters(
-        //                         parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
-        //                         parameterWithName("startDate").description("Start date for service"),
-        //                         parameterWithName("endDate").description("End date for service"),
-        //                         parameterWithName("longitude").description("Longitude of the service location"),
-        //                         parameterWithName("latitude").description("Latitude of the service location"),
-        //                         parameterWithName("serviceType").description("Type of service required")
-        //                 ),
-        //                 responseFields(
-        //                         fieldWithPath("$").description("List of caregivers matching the criteria")
-        //                 )
-        //         ));
+//
+//         mockMvc.perform(get("/api/caregivers/search")
+//                         .param("petTypes", "DOG,CAT")
+//                         .param("startDate", "2024-06-15")
+//                         .param("endDate", "2024-06-20")
+//                         .param("longitude", "8.7423401")
+//                         .param("latitude", "50.1863407")
+//                         .param("serviceType", "PET_HOSTING"))
+//                 .andExpect(status().isOk())
+//                 .andExpect(jsonPath("$", hasSize(equalTo(2))))
+//                 .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
+//                 .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")))
+//                 .andDo(result -> System.out.println("Request parameters: " + result.getRequest().getParameterMap()))
+//                 .andDo(document("search-caregivers",
+//                         requestParameters(
+//                                 parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
+//                                 parameterWithName("startDate").description("Start date for service"),
+//                                 parameterWithName("endDate").description("End date for service"),
+//                                 parameterWithName("longitude").description("Longitude of the service location"),
+//                                 parameterWithName("latitude").description("Latitude of the service location"),
+//                                 parameterWithName("serviceType").description("Type of service required")
+//                         ),
+//                         responseFields(
+//                                 fieldWithPath("$").description("List of caregivers matching the criteria")
+//                         )
+//                 ));
     }
 
     @Order(11)
@@ -369,28 +367,28 @@ public class IntegrationTests {
         mockMvc.perform(get("/api/users/profile/{username}", "user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("user"));
-                // .andDo(document("get-user-profile",
-                //         pathParameters(
-                //                 parameterWithName("username").description("The username of the user")
-                //         ),
-                //         responseFields(
-                //                 fieldWithPath("userId").description("The ID of the user"),
-                //                 fieldWithPath("username").description("The username of the user"),
-                //                 fieldWithPath("password").optional().description("The password of the user"),
-                //                 fieldWithPath("name").description("The name of the user"),
-                //                 fieldWithPath("email").description("The email address of the user"),
-                //                 fieldWithPath("phone").description("The phone number of the user"),
-                //                 fieldWithPath("location").optional().description("The location of the user"),
-                //                 fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
-                //                 fieldWithPath("authorities").description("Roles assigned to the user"),
-                //                 fieldWithPath("enabled").description("Status of the user's account"),
-                //                 fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
-                //                 fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
-                //                 fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
-
-                //         )
-
-                // ));
+//                 .andDo(document("get-user-profile",
+//                         pathParameters(
+//                                 parameterWithName("username").description("The username of the user")
+//                         ),
+//                         responseFields(
+//                                 fieldWithPath("userId").description("The ID of the user"),
+//                                 fieldWithPath("username").description("The username of the user"),
+//                                 fieldWithPath("password").optional().description("The password of the user"),
+//                                 fieldWithPath("name").description("The name of the user"),
+//                                 fieldWithPath("email").description("The email address of the user"),
+//                                 fieldWithPath("phone").description("The phone number of the user"),
+//                                 fieldWithPath("location").optional().description("The location of the user"),
+//                                 fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
+//                                 fieldWithPath("authorities").description("Roles assigned to the user"),
+//                                 fieldWithPath("enabled").description("Status of the user's account"),
+//                                 fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
+//                                 fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
+//                                 fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
+//
+//                         )
+//
+//                 ));
     }
 
     @Order(12)
@@ -728,49 +726,47 @@ public class IntegrationTests {
 //                    )
 //                ));
     }
-  
-        // @Order(24)
-        // @Test
-        // public void testGetMessagesBetweenUsers() throws Exception {
-        //         Long user1Id = 1L; // Assuming this is a valid user ID
-        //         Long user2Id = 2L; // Assuming this is another valid user ID
 
-        //         MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
-        //                         .param("user1Id", user1Id.toString())
-        //                         .param("user2Id", user2Id.toString()))
-        //                 .andExpect(status().isOk())
-        //                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
-        //                 .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
-        //                 .andReturn();
+    @Order(24)
+    @Test
+    public void testGetMessagesBetweenUsers() throws Exception {
+    Long user1Id = 1L;
+    Long user2Id = 2L;
 
-        //         String jsonResponse = result.getResponse().getContentAsString();
-        //         System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
-        // }
-        
-        @Order(24)       
-        @Test
-        public void testGetMessagesBetweenUsers() throws Exception {
-        Long user1Id = 1L; 
-        Long user2Id = 2L; 
+    mockMvc.perform(get("/api/chat/messages/between")
+                    .param("user1Id", user1Id.toString())
+                    .param("user2Id", user2Id.toString()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+            .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
+//             .andDo(document("get-messages-between-users",
+//                     responseFields(
+//                     // fieldWithPath("$").description("List of messages exchanged between the two users"),
+//                     fieldWithPath("$[*].message").description("The content of each message")
+//                     )
+//             ));
 
-        mockMvc.perform(get("/api/chat/messages/between")
-                        .param("user1Id", user1Id.toString())
-                        .param("user2Id", user2Id.toString()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
-                .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
-                // .andDo(document("get-messages-between-users",
-                //         responseFields(
-                //         // fieldWithPath("$").description("List of messages exchanged between the two users"),
-                //         fieldWithPath("$[*].message").description("The content of each message")
-                //         )
-                // ));
+//    @Test
+//    public void testGetMessagesBetweenUsers() throws Exception {
+//        Long user1Id = 1L; // Assuming this is a valid user ID
+//        Long user2Id = 2L; // Assuming this is another valid user ID
+//
+//        MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
+//                        .param("user1Id", user1Id.toString())
+//                        .param("user2Id", user2Id.toString()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+//                .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
+//                .andReturn();
+//
+//        String jsonResponse = result.getResponse().getContentAsString();
+//        System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
     }
 
     @Order(25)
     @Test
     public void testGetContacts() throws Exception {
-        Long userId = 1L; // Assuming this is a valid user ID
+        Long userId = 3L; // Assuming this is a valid user ID
 
         mockMvc.perform(get("/api/chat/contacts/{userId}", userId))
                 .andExpect(status().isOk())
@@ -779,6 +775,17 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[1].userId").exists())
                 .andExpect(jsonPath("$[1].name").exists());
+//                .andDo(document("get-contacts",
+//                        pathParameters(
+//                                parameterWithName("userId").description("The ID of the user whose contacts are being retrieved")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("$[*].userId").description("The ID of the contact"),
+//                                fieldWithPath("$[*].username").description("The username of the contact"),
+//                                fieldWithPath("$[*].message").description("A message associated with the contact")
+//                        )
+//                ));
+
 //    @Test
 //    public void testGetContacts() throws Exception {
 //        Long userId = 3L; // Assuming this is a valid user ID
@@ -795,31 +802,6 @@ public class IntegrationTests {
 //        // Print out the response content
 //        String jsonResponse = result.getResponse().getContentAsString();
 //        System.out.println("Contacts for User " + userId + ": " + jsonResponse);
-
-
-//    @Test
-//    public void testGetContacts() throws Exception {
-//        Long senderId = 1L; // Assuming this is a valid sender ID
-//
-//        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
-//                .andExpect(jsonPath("$[0].userId").exists())
-//                .andExpect(jsonPath("$[0].name").exists())
-//                .andExpect(jsonPath("$[1].userId").exists())
-//                .andExpect(jsonPath("$[1].name").exists());
-//                .andDo(document("get-contacts",
-//                        pathParameters(
-//                                parameterWithName("senderId").description("The ID of the user whose contacts are being retrieved")
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("$").description("List of users who have had conversations with the sender")
-//                        )));
-
     }
 
     @Order(26)
