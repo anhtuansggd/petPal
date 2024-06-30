@@ -7,34 +7,58 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignUp() {
+  const router = useRouter();
   const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [isCareGiver, setIsCareGiver] = useState(1);
+  // const [isCareGiver, setIsCareGiver] = useState<Number>(1);
+  const isCaregiver = 1;
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     const newUser = {
       name,
-      userName,
+      phone,
       email,
-      phoneNumber,
+      username,
       password,
-      isCareGiver,
+      isCaregiver,
     };
 
-    const res = await fetch("http://localhost:8081/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newUser),
-    });
+    try {
+      const res = await fetch("http://localhost:8081/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
 
-    const final = await res.json();
+      if (!res.ok) {
+        throw new Error("Registration failed");
+      }
+
+      const data = await res.json();
+      console.log("New user created:", data);
+
+      // Save session to local storage
+      localStorage.setItem("session", JSON.stringify(data));
+
+      // Set session expiration
+      const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
+      localStorage.setItem("sessionExpiration", expirationTime.toString());
+
+      // Redirect to home page
+      router.push("/home-page");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -74,7 +98,7 @@ export default function SignUp() {
                   label="User name"
                   className=" rounded-lg px-3 py-2 "
                   onChange={(e) => setUserName(e.target.value)}
-                  value={userName}
+                  value={username}
                 />
               </div>
               <div>
@@ -95,8 +119,8 @@ export default function SignUp() {
                   type="tel"
                   label="Phone number"
                   className=" rounded-lg px-3 py-2 "
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  value={phoneNumber}
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone}
                 />
               </div>
               <div>
@@ -118,11 +142,11 @@ export default function SignUp() {
                   variant="outlined"
                   color="teal"
                   label="You are?"
-                  onChange={(e) => setIsCareGiver(e.target.)}
-                  value={isCareGiver}
+                  onChange={(value) => setIsCareGiver(Number(value))}
+                  value={isCareGiver.toString()}
                 >
                   <Option value="0">Pet owner</Option>
-                  <Option value="1">Pet sitter</Option>
+                  <Option value="1">Care giver</Option>
                 </Select>
               </div> */}
 
