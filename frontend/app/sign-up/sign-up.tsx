@@ -47,7 +47,16 @@ export default function SignUp() {
       // Save session to local storage
       localStorage.setItem("session", JSON.stringify(data));
 
-      // Set session expiration
+      // Save user data and session to local storage
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          name: data.name,
+          email: data.email,
+          username: data.username,
+          // Add any other relevant user data you want to store
+        })
+      );
       const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
       localStorage.setItem("sessionExpiration", expirationTime.toString());
 

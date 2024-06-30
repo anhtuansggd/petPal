@@ -26,9 +26,6 @@ export default function LogIn() {
               <div className="text-5xl text-primary-light-green font-bold">
                 <h1>Welcome back!</h1>
               </div>
-              {/* <p className="text-gray-600 mt-1">
-                Login with the data you entered during your registration.
-              </p> */}
             </div>
             <form>
               <div className="mb-4">
