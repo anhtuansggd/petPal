@@ -1,13 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { Button, Typography } from '@material-tailwind/react';
-import image from ''
+import React, { useRef, useEffect, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { Button, Typography } from "@material-tailwind/react";
 
 mapboxgl.accessToken =
-  'pk.eyJ1IjoidHN1ZHkiLCJhIjoiY2x0eWRpMHI1MGd2ejJpbzBla3JxNndmbiJ9.ICPd6DnmHNqmGN0P5-Sbmw';
+  "pk.eyJ1IjoidHN1ZHkiLCJhIjoiY2x0eWRpMHI1MGd2ejJpbzBla3JxNndmbiJ9.ICPd6DnmHNqmGN0P5-Sbmw";
 
 const Map = () => {
   const mapContainerRef = useRef(null);
@@ -15,7 +14,14 @@ const Map = () => {
   const [lng, setLng] = useState(106.7);
   const [lat, setLat] = useState(10.8);
   const [zoom, setZoom] = useState(14);
-  const [popoverInfo, setPopoverInfo] = useState({ visible: false, x: 0, y: 0, content: '', lng: 0, lat: 0 });
+  const [popoverInfo, setPopoverInfo] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    content: "",
+    lng: 0,
+    lat: 0,
+  });
 
   const generateRandomCoordinates = (center, radius = 0.01) => {
     const y0 = center.latitude;
@@ -29,73 +35,83 @@ const Map = () => {
     const x = w * Math.cos(t);
     const y = w * Math.sin(t);
 
-    return { 'latitude': y + y0, 'longitude': x + x0 };
+    return { latitude: y + y0, longitude: x + x0 };
   };
 
   const locateUser = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      const center = [position.coords.longitude, position.coords.latitude];
-      if (mapRef.current) {
-        mapRef.current.flyTo({
-          center: center,
-          zoom: 14
-        })
-      }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const center = [position.coords.longitude, position.coords.latitude];
+        if (mapRef.current) {
+          mapRef.current.flyTo({
+            center: center,
+            zoom: 14,
+          });
+        }
 
-      const markers = document.getElementsByClassName('mapboxgl-marker')
-      while (markers[0]) {
-        markers[0].parentNode?.removeChild(markers[0]);
-      }
+        const markers = document.getElementsByClassName("mapboxgl-marker");
+        while (markers[0]) {
+          markers[0].parentNode?.removeChild(markers[0]);
+        }
 
-      const userMarker = new mapboxgl.Marker({ color: 'red' })
-        .setLngLat(center)
-        .addTo(mapRef.current);
-
-      userMarker.getElement().addEventListener('click', (e) => {
-        const rect = e.target.getBoundingClientRect();
-        setPopoverInfo({
-          visible: true,
-          x: rect.left,
-          y: rect.top,
-          content: 'You are here',
-          lng: center[0],
-          lat: center[1]
-        });
-      });
-
-      // Simulate adding nearby caregivers
-      for (let i = 0; i < 1; i++) {
-        const nearbyLocation = generateRandomCoordinates(position.coords, 1000); // 1000 meters radius
-        const caregiverMarker = new mapboxgl.Marker()
-          .setLngLat([nearbyLocation.longitude, nearbyLocation.latitude])
+        const userMarker = new mapboxgl.Marker({ color: "red" })
+          .setLngLat(center)
           .addTo(mapRef.current);
 
-        caregiverMarker.getElement().addEventListener('click', (e) => {
+        userMarker.getElement().addEventListener("click", (e) => {
           const rect = e.target.getBoundingClientRect();
-          const imagePath = `/shannon.jpg`; 
-          console.log(`Image path: ${imagePath}`); 
           setPopoverInfo({
             visible: true,
             x: rect.left,
             y: rect.top,
-            content: `<img src="${imagePath}" alt="Caregiver ${i + 1}" style="width: 100px; height: 100px;" /><br/>Caregiver ${i + 1}`,
-            lng: nearbyLocation.longitude,
-            lat: nearbyLocation.latitude
+            content: "You are here",
+            lng: center[0],
+            lat: center[1],
           });
         });
+
+        // Simulate adding nearby caregivers
+        for (let i = 0; i < 1; i++) {
+          const nearbyLocation = generateRandomCoordinates(
+            position.coords,
+            1000
+          ); // 1000 meters radius
+          const caregiverMarker = new mapboxgl.Marker()
+            .setLngLat([nearbyLocation.longitude, nearbyLocation.latitude])
+            .addTo(mapRef.current);
+
+          caregiverMarker.getElement().addEventListener("click", (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const imagePath = `/shannon.jpg`;
+            console.log(`Image path: ${imagePath}`);
+            setPopoverInfo({
+              visible: true,
+              x: rect.left,
+              y: rect.top,
+              content: `<img src="${imagePath}" alt="Caregiver ${
+                i + 1
+              }" style="width: 100px; height: 100px;" /><br/>Caregiver ${
+                i + 1
+              }`,
+              lng: nearbyLocation.longitude,
+              lat: nearbyLocation.latitude,
+            });
+          });
+        }
+      },
+      (err) => {
+        console.log("Geolocation error: ", err);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
       }
-    }, (err) => {
-      console.log("Geolocation error: ", err);
-    }, {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    });
+    );
   };
 
   // Initialize map when component mounts
   useEffect(() => {
-
     navigator.geolocation.getCurrentPosition(function (position) {
       setLng(position.coords.longitude);
       setLat(position.coords.latitude);
@@ -103,17 +119,17 @@ const Map = () => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
-      zoom: zoom
+      zoom: zoom,
     });
 
     mapRef.current = map;
 
     // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-    map.on('move', () => {
+    map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
@@ -121,12 +137,12 @@ const Map = () => {
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
+      mapboxgl: mapboxgl,
     });
 
     map.addControl(geocoder);
 
-    geocoder.on('result', (e) => {
+    geocoder.on("result", (e) => {
       const { center, place_name } = e.result;
       setLng(center[0]);
       setLat(center[1]);
@@ -134,23 +150,43 @@ const Map = () => {
     });
 
     return () => map.remove();
-  }, []); 
+  }, []);
 
   return (
     <div>
-      <div className='sidebarStyle'>
+      <div className="sidebarStyle">
         <div>
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | <button onClick={locateUser}>Locate Me</button>
+          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} |{" "}
+          <button onClick={locateUser}>Locate Me</button>
         </div>
       </div>
       <div id="geocoder" className="geocoder"></div>
-      <div className='map-container' ref={mapContainerRef} style={{ width: '100%', height: '400px' }} />
+      <div
+        className="map-container"
+        ref={mapContainerRef}
+        style={{ width: "100%", height: "400px" }}
+      />
       {popoverInfo.visible && (
-        <div style={{ position: 'absolute', left: popoverInfo.x, top: popoverInfo.y, backgroundColor: 'white', padding: '10px', border: '1px solid black' }}>
-          <Typography dangerouslySetInnerHTML={{ __html: popoverInfo.content }} />
+        <div
+          style={{
+            position: "absolute",
+            left: popoverInfo.x,
+            top: popoverInfo.y,
+            backgroundColor: "white",
+            padding: "10px",
+            border: "1px solid black",
+          }}
+        >
+          <Typography
+            dangerouslySetInnerHTML={{ __html: popoverInfo.content }}
+          />
           <Typography>Longitude: {popoverInfo.lng}</Typography>
           <Typography>Latitude: {popoverInfo.lat}</Typography>
-          <Button onClick={() => setPopoverInfo({ ...popoverInfo, visible: false })}>Close</Button>
+          <Button
+            onClick={() => setPopoverInfo({ ...popoverInfo, visible: false })}
+          >
+            Close
+          </Button>
         </div>
       )}
     </div>
