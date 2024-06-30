@@ -1,5 +1,6 @@
 "use client";
 import ajax from "../services/fetchService"
+import getUserData from "../services/getUserData"
 import Chat from "./chat";
 import ChatSideBar from "./chatSideBar";
 import { useState, useEffect } from "react";
@@ -10,7 +11,7 @@ export default function ChatPage() {
   const [accounts, setAccounts] = useState<any>([]);
 
   useEffect(() => {
-    ajax("api/chat/contacts/1", "GET").then((contacts) => {
+    ajax(`api/chat/contacts/${getUserData().userId}`, "GET").then((contacts) => {
       setAccounts(contacts)
       console.log('contacts: ', contacts)
     })

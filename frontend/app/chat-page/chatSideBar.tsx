@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Account, Message } from "./interfaces";
 import { Avatar } from "@material-tailwind/react";
 
 export default function ChatSideBar({accounts, onAccountSelect}:any) {

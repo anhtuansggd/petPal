@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ajax from "../services/fetchService"
+import getUserData from "../services/getUserData"
 import { Avatar } from "@material-tailwind/react";
 
 export default function Chat({ selectedAccount }: any) {
@@ -9,7 +10,7 @@ export default function Chat({ selectedAccount }: any) {
   const fetchNewMessages = async () => {
     try {
       if (selectedAccount !== null) {
-        ajax(`api/chat/messages/between?user1Id=1&user2Id=${selectedAccount.userId}`, "GET").then((receivedMessages) => {
+        ajax(`api/chat/messages/between?user1Id=${getUserData().userId}&user2Id=${selectedAccount.userId}`, "GET").then((receivedMessages) => {
           setMessages(receivedMessages)  
         })   
       }
@@ -30,11 +31,11 @@ export default function Chat({ selectedAccount }: any) {
     try {
       if (selectedAccount !== null) {
         ajax("api/chat/send", "POST", {
-          "senderId": 1,
+          "senderId": getUserData().userId,
           "receiverId": selectedAccount.userId,
           "message": input
         }).then(() => {
-          console.log(`user 1 send '${input}' to user ${selectedAccount.userId}`)
+          console.log(`user ${getUserData().userId} send '${input}' to user ${selectedAccount.userId}`)
           setInput("");
         })
       }
@@ -50,7 +51,7 @@ export default function Chat({ selectedAccount }: any) {
 
         <div className="grow ml-2 flex flex-col-reverse overflow-y-scroll h-0">
           {messages.slice().reverse().map((msg:any) => (
-            msg.sender.userId === 1 ?
+            msg.sender.userId === getUserData().userId ?
             <div key={msg.id} className="flex flex-row items-end m-2 self-end">
               <div className="bg-[#01afa2] text-white rounded-full rounded-br-none mr-2 px-4 py-3">
                 {msg.message}
