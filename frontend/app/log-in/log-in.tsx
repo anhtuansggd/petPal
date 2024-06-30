@@ -1,12 +1,59 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input, Button } from "@material-tailwind/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // import getData from "../services/fetchService";
 
 export default function LogIn() {
+  const router = useRouter();
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const User = {
+      username,
+      password,
+    }
+
+    try{
+      const res = await fetch("http://localhost:8081/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(User),
+      });
+
+      if (!res.ok){
+        throw new Error("Login failed");
+      }
+
+      const data = await res.json();
+      console.log("User Login:", data);
+
+      // Save session to local storage
+      localStorage.setItem("session", JSON.stringify(data));
+
+
+      // Set session expiration
+      const expirationTime = new Date().getTime() + 60 * 60 * 1000; // 60 minutes
+      localStorage.setItem("sessionExpiration", expirationTime.toString());
+
+      // Redirect to home page
+      router.push("/home-page");
+    } catch (error) {
+      console.error("Error during log-in session:", error);
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setIsLoading(false);
+    }
+    };
+
   return (
     <div className="w-8/12 mx-auto mt-12">
       <div className="flex h-max flex-col md:flex-row items-center justify-between">
@@ -30,16 +77,22 @@ export default function LogIn() {
                 Login with the data you entered during your registration.
               </p> */}
             </div>
-            <form>
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4 md:space-y-6"
+              action="#"
+            >
               <div className="mb-4">
                 <label className="block text-gray-700 font-bold mb-2">
                   User name
                 </label>
                 <input
                   type="name"
-                  id="email"
+                  id="username"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="john.doe@gmail.com"
+                  placeholder="Your username"
+                  onChange={(e)=> setUserName(e.target.value)}
+                  value={username}
                 />
               </div>
               <div className="mb-4">
@@ -52,6 +105,8 @@ export default function LogIn() {
                   autoComplete="true"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="***********"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
               </div>
               <div className="flex items-center justify-between">
