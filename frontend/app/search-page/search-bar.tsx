@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Map from "../components/map";
 
 export default function SearchBar() {
   const router = useRouter();
@@ -140,7 +141,8 @@ export default function SearchBar() {
       </form>
 
       <div className="w-9/12 mt-12 mx-auto">
-        <Link href={"/sitter-info"}>
+        <Map />
+        {/*<Link href={"/sitter-info"}>
           <Image
             src="/sitter1.jpg"
             width="0"
@@ -150,7 +152,7 @@ export default function SearchBar() {
             alt="Map image"
             className="rounded"
           />
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
