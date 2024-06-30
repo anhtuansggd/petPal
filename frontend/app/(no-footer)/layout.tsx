@@ -7,7 +7,7 @@ export default function NoFooterLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col w-screen h-screen">
+    <div className="flex flex-col w-screen h-screen overflow-x-hidden overflow-y-hidden">
       <NavBar />
       <div className="grow">
         {children}

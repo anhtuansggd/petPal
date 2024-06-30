@@ -6,7 +6,7 @@ export default function ChatSideBar({accounts, onAccountSelect}:any) {
   const [searchInput, setSearchInput] = useState<string>("");
 
   return (
-    <div className="flex grow flex-col h-full">
+    <div className="flex flex-col h-full">
       <div className="p-4 cursor-pointer hover:bg-gray-200">Current user</div>
 
       <input

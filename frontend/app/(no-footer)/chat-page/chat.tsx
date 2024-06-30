@@ -48,7 +48,7 @@ export default function Chat({ selectedAccount }: any) {
       <div className="flex flex-col w-full">
         <div className="flex-none p-4 bg-gray-100">{selectedAccount.name}</div>
 
-        <div className="grow ml-2 flex flex-col-reverse">
+        <div className="grow ml-2 flex flex-col-reverse overflow-y-scroll h-0">
           {messages.slice().reverse().map((msg:any) => (
             msg.sender.userId === 1 ?
             <div key={msg.id} className="flex flex-row items-end m-2 self-end">
