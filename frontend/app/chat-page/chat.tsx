@@ -43,11 +43,20 @@ export default function Chat({ selectedAccount }: any) {
       console.log("Failed to send message. Error connecting to the server")
     }
   };
+  
+  const handleKeyDown = (event:any) => {
+    if (event.key === 'Enter') {
+      handleSendMessage()
+    }
+  }
 
   return (
     selectedAccount !== null && (
       <div className="flex flex-col w-full">
-        <div className="flex-none p-4 bg-gray-100">{selectedAccount.name}</div>
+        <div className="flex-none p-4 bg-gray-100">
+          <Avatar src="/chat-page/defaultAvatar.jpg" alt="avatar" />
+          <span className="m-4 text-[#01afa2] text-xl font-bold">{selectedAccount.name}</span>
+        </div>
 
         <div className="grow ml-2 flex flex-col-reverse overflow-y-scroll h-0">
           {messages.slice().reverse().map((msg:any) => (
@@ -69,11 +78,13 @@ export default function Chat({ selectedAccount }: any) {
 
         <div className="flex">
           <input
+            id="messageInput"
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
             className="p-2 w-full mb-4"
+            onKeyDown={handleKeyDown}
           />
           <button
             onClick={handleSendMessage}
