@@ -6,6 +6,7 @@ import ChatSideBar from "./chatSideBar";
 import { useState, useEffect } from "react";
 import { Account } from "./interfaces";
 import NavBar from "../components/nav-bar";
+import Contract from "./contract";
 
 export default function ChatPage() {
   const [accounts, setAccounts] = useState<any>([]);
@@ -32,6 +33,7 @@ export default function ChatPage() {
           <Chat selectedAccount={selectedAccount} />
         </div>
       </div>
+      <Contract/>
     </div>
 
   );

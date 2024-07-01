@@ -1,7 +1,7 @@
-const getUserData = () => {
-  const stringifiedUserDataItem = localStorage.getItem("userData")
-  const stringifiedUserData = stringifiedUserDataItem !== null ? stringifiedUserDataItem : ''
-  return JSON.parse(stringifiedUserData)
+const getLoginData = () => {
+  const stringifiedLoginDataItem = localStorage.getItem("loginData")
+  const stringifiedLoginData = stringifiedLoginDataItem !== null ? stringifiedLoginDataItem : ''
+  return JSON.parse(stringifiedLoginData)
 };
 
-export default getUserData;
+export default getLoginData;
