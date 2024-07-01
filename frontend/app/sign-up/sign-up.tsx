@@ -13,8 +13,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  // const [isCareGiver, setIsCareGiver] = useState<Number>(1);
-  const isCaregiver = 1;
+  const [isCaregiver, setIsCareGiver] = useState("");
+  // const isCaregiver = 1;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,7 +49,7 @@ export default function SignUp() {
 
       // Save user data and session to local storage
       localStorage.setItem(
-        "userData",
+        "signupData",
         JSON.stringify({
           name: data.name,
           email: data.email,
@@ -145,19 +145,29 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* <div>
-                <Select
+              <div>
+                <Input
+                  variant="outlined"
+                  color="teal"
+                  type="number"
+                  label="You are?"
+                  placeholder="0 - Pet owner or 1 - Care giver"
+                  className=" rounded-lg px-3 py-2 "
+                  onChange={(e) => setIsCareGiver(e.target.value)}
+                  value={isCaregiver}
+                />
+                {/* <Select
                   className="rounded-lg px-3 py-2 "
                   variant="outlined"
                   color="teal"
                   label="You are?"
-                  onChange={(value) => setIsCareGiver(Number(value))}
-                  value={isCareGiver.toString()}
+                  // onChange={(e) => setIsCareGiver(e.target.value)}
+                  // value={isCareGiver}
                 >
                   <Option value="0">Pet owner</Option>
                   <Option value="1">Care giver</Option>
-                </Select>
-              </div> */}
+                </Select> */}
+              </div>
 
               <Button
                 type="submit"

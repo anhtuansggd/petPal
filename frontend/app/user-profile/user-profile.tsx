@@ -1,7 +1,8 @@
 "use client";
 import { Button } from "@material-tailwind/react";
-
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface UserData {
   id: number;
@@ -10,6 +11,7 @@ interface UserData {
   role?: string;
 }
 export default function UserProfile() {
+  const router = useRouter();
   const [user, setUser] = useState<UserData[]>([]);
 
   useEffect(() => {
@@ -21,7 +23,6 @@ export default function UserProfile() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              // Include other headers as needed, such as Authorization for JWT
             },
           }
         );
@@ -45,17 +46,15 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-fit">
       <div className="w-8/12 mx-auto py-8">
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
           <div className="col-span-4 sm:col-span-3">
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center">
-                {user &&
+                {/* {user &&
                   user.map((userData, index) => (
                     <div key={userData.id}>
-                      {" "}
-                      {/* Ensure you have a unique key here */}
                       <img
                         src={
                           userData.picture ||
@@ -68,7 +67,22 @@ export default function UserProfile() {
                         {userData.role || "Pet owner"}
                       </p>
                     </div>
-                  ))}
+                  ))} */}
+
+                <div>
+                  {" "}
+                  {/* Ensure you have a unique key here */}
+                  <Image
+                    src={"/placeholder_avatar.png"}
+                    width={120}
+                    height={120}
+                    alt="Placeholder image"
+                    className="bg-gray-300 rounded-full mb-4 shrink-0"
+                  />
+                  <h1 className="text-xl font-bold"></h1>
+                  <p className="text-gray-700 text-center">{"Pet owner"}</p>
+                </div>
+
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
                   <Button
                     ripple={true}
@@ -77,11 +91,15 @@ export default function UserProfile() {
                     Edit info
                   </Button>
                   <Button
+                    onClick={() => {
+                      localStorage.removeItem("loginData");
+                      router.push("/home-page");
+                    }}
                     ripple={true}
                     color="red"
                     className="hover:bg-red-800"
                   >
-                    Delete
+                    Log out
                   </Button>
                 </div>
               </div>

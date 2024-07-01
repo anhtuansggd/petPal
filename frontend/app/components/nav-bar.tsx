@@ -10,10 +10,15 @@ export default function NavBar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      setUser(JSON.parse(userData));
-      console.log(userData);
+    const loginData = localStorage.getItem("loginData");
+    const signupData = localStorage.getItem("signupData");
+    if (loginData) {
+      setUser(JSON.parse(loginData));
+
+      console.log(loginData);
+    } else if (signupData) {
+      setUser(JSON.parse(signupData));
+      console.log(signupData);
     }
   }, []);
   return (
@@ -67,10 +72,7 @@ export default function NavBar() {
                 {user ? (
                   <div className="avatar">
                     <Link href={"/user-profile"}>
-                      <Avatar
-                        src="https://docs.material-tailwind.com/img/face-2.jpg"
-                        alt="avatar"
-                      />
+                      <Avatar src="/placeholder_avatar.png" alt="avatar" />
                     </Link>
                   </div>
                 ) : (

@@ -41,24 +41,18 @@ export default function Login() {
 
       // Save user data and session to local storage
       localStorage.setItem(
-        "userData",
+        "loginData",
         JSON.stringify({
           name: data.name,
           email: data.email,
           username: data.username,
+          isCaregiver: data.isCaregiver,
+
           // Add any other relevant user data you want to store
         })
       );
       // Save session to local storage
       localStorage.setItem("session", JSON.stringify(data));
-
-      // // Save JWT Token to local storage
-      // const authToken = res.headers.get('Authorization');
-      // if (authToken) {
-      //   localStorage.setItem("jwtToken", authToken);
-      // } else {
-      //   console.error('No Authorization Token Found');
-      // }
 
       // Set session expiration
       const expirationTime = new Date().getTime() + 60 * 60 * 1000; // 60 minutes
@@ -66,14 +60,15 @@ export default function Login() {
 
       // Redirect to home page
       router.push("/home-page");
+
       setAlertMessage("Login successful!");
       setAlert(true);
-      setTimeout(() => setAlert(false), 1000);
+      setTimeout(() => setAlert(false), 2000);
     } catch (error) {
       console.error("Error during log-in session:", error);
       setAlertMessage("Login failed!");
       setAlert(true);
-      setTimeout(() => setAlert(false), 1000);
+      setTimeout(() => setAlert(false), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +77,10 @@ export default function Login() {
   return (
     <div className="w-8/12 mx-auto mt-12">
       {alert && (
-        <Alert color={alertMessage.includes("successful") ? "green" : "red"}>
+        <Alert
+          className="w-1/4"
+          color={alertMessage.includes("successful") ? "green" : "red"}
+        >
           {alertMessage}
         </Alert>
       )}
