@@ -61,7 +61,7 @@ export default function SignUp() {
       // localStorage.setItem("sessionExpiration", expirationTime.toString());
 
       // Redirect to home page
-      router.push("/home-page");
+      router.push("/log-in");
     } catch (error) {
       console.error("Error during registration:", error);
       // Handle error (e.g., show error message to user)

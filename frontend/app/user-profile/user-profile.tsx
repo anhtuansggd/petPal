@@ -13,6 +13,9 @@ interface UserData {
 export default function UserProfile() {
   const router = useRouter();
   const [user, setUser] = useState<UserData[]>([]);
+  const [role, setRole] = useState<string>("Petowner");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -38,11 +41,19 @@ export default function UserProfile() {
         console.log(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        // Handle errors, such as showing a notification to the user
       }
     };
 
     fetchUserData();
+
+    const loginData = localStorage.getItem("loginData");
+    if (loginData) {
+      const parsedLoginData = JSON.parse(loginData);
+      const userRole = parsedLoginData.isCaregiver ? "Caregiver" : "Petowner";
+      setRole(userRole);
+      setName(parsedLoginData.name);
+      setEmail(parsedLoginData.email);
+    }
   }, []);
 
   return (
@@ -60,16 +71,17 @@ export default function UserProfile() {
                     width={120}
                     height={120}
                     alt="Placeholder image"
-                    className="bg-gray-300 rounded-full mb-4 shrink-0"
+                    className="bg-gray-300 rounded-full mb-4 shrink-0 text-center"
                   />
-                  <h1 className="text-xl font-bold"></h1>
-                  <p className="text-gray-700 text-center">{"Pet owner"}</p>
+                  <h1 className="text-xl font-bold text-center">{name}</h1>
+                  <p className="text-center">{email}</p>
+                  <p className="text-center">{role}</p>
                 </div>
 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
                   <Button
                     ripple={true}
-                    className="bg-primary-light-green text-white hover:bg-primary-dark-green py-2 px-4 duration-300 rounded"
+                    className="bg-primary-light-green text-white hover:bg-primary-dark-green py-2 px-4 duration-300"
                   >
                     Edit info
                   </Button>
@@ -80,7 +92,7 @@ export default function UserProfile() {
                     }}
                     ripple={true}
                     color="red"
-                    className="hover:bg-red-800"
+                    className="hover:bg-red-800 text-white py-2 px-4 duration-300"
                   >
                     Log out
                   </Button>
@@ -91,18 +103,99 @@ export default function UserProfile() {
           <div className="col-span-4 sm:col-span-9">
             <div className="bg-white shadow rounded-lg p-6">
               <div>
-                <h1 className="text-5xl font-bold mb-4 text-primary-light-green">
-                  My pets
-                </h1>
-                <p className="text-gray-700">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  finibus est vitae tortor ullamcorper, ut vestibulum velit
-                  convallis. Aenean posuere risus non velit egestas suscipit.
-                  Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis
-                  in faucibus orci luctus et ultrices posuere cubilia Curae;
-                  Aliquam erat volutpat. Nulla vulputate pharetra tellus, in
-                  luctus risus rhoncus id.
-                </p>
+                {role === "Petowner" ? (
+                  <>
+                    <h1 className="text-5xl font-bold mb-6 text-primary-light-green">
+                      Petowner Details
+                    </h1>
+                    <p className="text-2xl font-bold text-gray-700 mb-1">
+                      Your Pets:
+                    </p>
+                    {/* <ul className="text-gray-700 list-disc pl-5">
+                      <li>Dog</li>
+                      <li>Cat</li>
+                      <li>Guinea Pig</li>
+                    </ul> */}
+                    <form className="text-gray-700">
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Dog
+                      </label>
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Cat
+                      </label>
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Guinea Pig
+                      </label>
+                    </form>
+                  </>
+                ) : (
+                  <>
+                    <h1 className="text-5xl font-bold mb-4 text-primary-light-green">
+                      Caregiver Details
+                    </h1>
+                    <p className="text-2xl font-bold text-gray-700 mb-1">
+                      <strong>Service:</strong>
+                    </p>
+                    <ul className="text-gray-700 list-disc pl-5 mb-1">
+                      <li>Pet Hosting</li>
+                      <li>Pet Sitting</li>
+                    </ul>
+                    {/* <form className="text-gray-700">
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Pet Hosting
+                      </label>
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Pet Sitting
+                      </label>
+                    </form> */}
+                    <p className="text-2xl font-bold text-gray-700 mb-2">
+                      <strong>Availability:</strong>
+                    </p>
+                    <form className="text-gray-700 flex justify-between mb-1">
+                      {[
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday",
+                      ].map((day) => (
+                        <label key={day} className="block">
+                          <input type="checkbox" className="mr-2" />
+                          {day}
+                        </label>
+                      ))}
+                    </form>
+                    <p className="text-2xl font-bold text-gray-700 mb-1">
+                      <strong>Pet Types:</strong>
+                    </p>
+                    <ul className="text-gray-700 list-disc pl-5">
+                      <li>Dog</li>
+                      <li>Cat</li>
+                      <li>Guinea Pig</li>
+                    </ul>
+                    {/* <form className="text-gray-700">
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Dog
+                      </label>
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Cat
+                      </label>
+                      <label className="block mb-2">
+                        <input type="checkbox" className="mr-2" />
+                        Guinea Pig
+                      </label>
+                    </form> */}
+                  </>
+                )}
               </div>
             </div>
           </div>

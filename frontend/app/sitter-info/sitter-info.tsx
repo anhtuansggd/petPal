@@ -16,7 +16,6 @@ export default function SitterInfo() {
     // const [isLoading, setIsLoading] = useState(false);
 
     e.preventDefault();
-    // setIsLoading(true);
 
     const Contract = {
       serviceType,
@@ -24,7 +23,6 @@ export default function SitterInfo() {
       startDate,
       endDate,
     };
-
     localStorage.setItem("contractData", JSON.stringify(Contract));
   };
 
