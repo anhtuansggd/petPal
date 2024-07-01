@@ -13,8 +13,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  // const [isCareGiver, setIsCareGiver] = useState<Number>(1);
-  const isCaregiver = 1;
+  const [isCaregiver, setIsCareGiver] = useState("");
+  // const isCaregiver = 1;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,7 +49,7 @@ export default function SignUp() {
 
       // Save user data and session to local storage
       localStorage.setItem(
-        "userData",
+        "loginData",
         JSON.stringify({
           name: data.name,
           email: data.email,
@@ -57,11 +57,8 @@ export default function SignUp() {
           // Add any other relevant user data you want to store
         })
       );
-      // const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
-      // localStorage.setItem("sessionExpiration", expirationTime.toString());
 
-      // Redirect to home page
-      router.push("/home-page");
+      router.push("/log-in");
     } catch (error) {
       console.error("Error during registration:", error);
       // Handle error (e.g., show error message to user)
@@ -145,19 +142,18 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* <div>
-                <Select
-                  className="rounded-lg px-3 py-2 "
+              <div>
+                <Input
                   variant="outlined"
                   color="teal"
+                  type="number"
                   label="You are?"
-                  onChange={(value) => setIsCareGiver(Number(value))}
-                  value={isCareGiver.toString()}
-                >
-                  <Option value="0">Pet owner</Option>
-                  <Option value="1">Care giver</Option>
-                </Select>
-              </div> */}
+                  placeholder="0 - Pet owner or 1 - Care giver"
+                  className=" rounded-lg px-3 py-2 "
+                  onChange={(e) => setIsCareGiver(e.target.value)}
+                  value={isCaregiver}
+                />
+              </div>
 
               <Button
                 type="submit"
