@@ -1,17 +1,22 @@
 "use client";
-
+import ajax from "../services/fetchService"
+import getUserData from "../services/getUserData"
 import Chat from "./chat";
 import ChatSideBar from "./chatSideBar";
 import { useState, useEffect } from "react";
 import { Account } from "./interfaces";
-import Contract from "./contract";
+import NavBar from "../components/nav-bar";
 
 export default function ChatPage() {
-  const [accounts, setAccounts] = useState<Account[]>([
-    { name: "bibi" },
-    { name: "bonbon" },
-    { name: "bebe" },
-  ]);
+  const [accounts, setAccounts] = useState<any>([]);
+
+  useEffect(() => {
+    ajax(`api/chat/contacts/${getUserData().userId}`, "GET").then((contacts) => {
+      setAccounts(contacts)
+      console.log('contacts: ', contacts)
+    })
+  }, [])
+
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const onAccountSelect = (account: Account) => {
@@ -19,10 +24,15 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex grow w-full h-full">
-      <ChatSideBar accounts={accounts} onAccountSelect={onAccountSelect} />
-      <Chat selectedAccount={selectedAccount} />
-      <Contract />
+    <div className="flex flex-col w-screen h-screen overflow-x-hidden overflow-y-hidden">
+      <NavBar />
+      <div className="grow">
+        <div className="flex grow w-full h-full">
+          <ChatSideBar accounts={accounts} onAccountSelect={onAccountSelect} />
+          <Chat selectedAccount={selectedAccount} />
+        </div>
+      </div>
     </div>
+
   );
 }

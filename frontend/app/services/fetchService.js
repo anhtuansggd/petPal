@@ -1,13 +1,13 @@
-function ajax(url, requestMethod, requestBody) {
+function ajax(url, requestMethod, requestBody){
   const fetchData = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: requestMethod,
-  };
+      headers: {
+          "Content-Type": "application/json"
+      },
+      method: requestMethod
+  }
 
-  if (requestBody) {
-    fetchData.body = JSON.stringify(requestBody);
+  if(requestBody){
+      fetchData.body = JSON.stringify(requestBody)
   }
 
   return fetch(url, fetchData).then((response) => {
