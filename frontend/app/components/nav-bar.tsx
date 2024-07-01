@@ -17,27 +17,29 @@ const routeNames = {
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
-
   useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      setUser(JSON.parse(userData));
-      console.log(userData);
+    const loginData = localStorage.getItem("loginData");
+    if (loginData) {
+      setUser(JSON.parse(loginData));
+
+      console.log(loginData);
     }
   }, []);
+
   return (
     <>
       <div className="w-full h-20 bg-white z-50 sticky top-0 border-y">
-        <div className="flex justify-center items-center h-full">
-          <Link className="flex-none text-primary-light-green" href="/home-page">
-            <Image
-              src="/logo.png"
-              height={300}
-              width={240}
-              alt="Hero image"
-              className="rounded"
-            />
-          </Link>
+        <div className="container mx-auto px-4 h-full">
+          <div className="flex justify-between items-center h-full">
+            <Link className=" text-primary-light-green" href="/home-page">
+              <Image
+                src="/petpal_logo.png"
+                height={0}
+                width={160}
+                alt="Hero image"
+                className="rounded"
+              />
+            </Link>
 
           <ul className="grow hidden md:flex justify-center gap-x-10 text-[#134848]">
             {Object.entries(routeNames).map(([route, routeName]) => (
@@ -49,27 +51,25 @@ export default function NavBar() {
             ))}
           </ul>
 
-          <ul className="flex-none flex gap-x-8 items-center pl-20 pr-10">
-            <li>
-              <Link href="/">EN</Link>
-            </li>
-            <li>
-              {user ? (
-                <div className="avatar">
-                  <Link href={"/user-profile"}>
-                    <Avatar
-                      src="https://docs.material-tailwind.com/img/face-2.jpg"
-                      alt="avatar"
-                    />
-                  </Link>
-                </div>
-              ) : (
-                <Button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">
-                  <Link href={"/log-in"}>LogIn</Link>
-                </Button>
-              )}
-            </li>
-          </ul>
+            <ul className="hidden md:flex gap-x-8 items-center">
+              <li>
+                <Link href="/">EN</Link>
+              </li>
+              <li>
+                {user ? (
+                  <div className="avatar">
+                    <Link href={"/user-profile"}>
+                      <Avatar src="/placeholder_avatar.png" alt="avatar" />
+                    </Link>
+                  </div>
+                ) : (
+                  <Button className="h-9 w-24 rounded-lg bg-[#5a35d6] text-white px-5">
+                    <Link href={"/log-in"}>LogIn</Link>
+                  </Button>
+                )}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </>

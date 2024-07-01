@@ -1,3 +1,4 @@
+import Footer from "../components/footer";
 import NavBar from "../components/nav-bar";
 import HeroSection from "./hero-section";
 import Map from "./map";
@@ -13,6 +14,7 @@ export default function Page() {
       <Services />
       <Testimonials />
       <Map />
+      <Footer />
       {/* <Test /> */}
     </main>
   );
