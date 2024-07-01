@@ -24,6 +24,8 @@ Code snippets and examples are provided to demonstrate the usage of each endpoin
 
 The API adheres to RESTFUL design principles and returns responses in JSON format.
 Proper HTTP status codes are used to indicate the success or failure of each request.
+
+This documentation aims to provide developers with a clear understanding of how to integrate and interact with the PetPal API effectively.
 [[resources-auth-register]]
 === Register User
 
@@ -97,7 +99,6 @@ include::{snippets}/register-user-bad-request/response-body.adoc[]
 
 .ResponseField
 include::{snippets}/register-user-bad-request/response-fields.adoc[]
-
 
 [[resources-auth-login]]
 === Login User
@@ -567,6 +568,29 @@ include::{snippets}/get-messages/response-body.adoc[]
 
 .ResponseField
 include::{snippets}/get-messages/response-fields.adoc[]
+
+[[resources-get-messages-between-users]]
+=== Get Messages Between Users
+
+A `GET` request to retrieve messages exchanged between two users.
+
+.Curl
+include::{snippets}/get-messages-between-users/curl-request.adoc[]
+
+.Request
+include::{snippets}/get-messages-between-users/http-request.adoc[]
+
+// .PathParameters
+// include::{snippets}/get-messages-between-users/path-parameters.adoc[]
+
+.Response
+include::{snippets}/get-messages-between-users/http-response.adoc[]
+
+// .ResponseBody
+// include::{snippets}/get-messages-between-users/response-body.adoc[]
+
+// .ResponseField
+// include::{snippets}/get-messages-between-users/response-fields.adoc[]
 
 [[resources-get-contacts]]
 === Get Contacts

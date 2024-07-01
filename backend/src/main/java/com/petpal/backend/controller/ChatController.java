@@ -5,8 +5,10 @@ import com.petpal.backend.domain.User;
 import com.petpal.backend.dto.MessageRequest;
 import com.petpal.backend.repository.ChatMessageRepository;
 import com.petpal.backend.repository.UserRepository;
+import com.petpal.backend.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,38 +17,42 @@ import java.util.List;
 @RequestMapping("/api/chat")
 public class ChatController {
     @Autowired
+    private ChatMessageService chatMessageService;
+    @Autowired
     private ChatMessageRepository chatMessageRepository;
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestBody MessageRequest messageRequest) {
-        User sender = userRepository.findById(messageRequest.getSenderId()).orElseThrow(() -> new RuntimeException("Sender not found"));
-        User receiver = userRepository.findById(messageRequest.getReceiverId()).orElseThrow(() -> new RuntimeException("Receiver not found"));
-        Message message = new Message();
-        message.setSender(sender);
-        message.setReceiver(receiver);
-        message.setMessage(messageRequest.getMessage());
-        chatMessageRepository.save(message);
-        return ResponseEntity.ok().body("Message sent successfully");
+        Message message = chatMessageService.saveMessage(messageRequest);
+        return ResponseEntity.ok().body("Message sent successfully: " + message.getId());
     }
 
     @GetMapping("/messages")
-    public ResponseEntity<List<Message>> getMessages(@RequestParam Long senderId, @RequestParam Long receiverId) {
-        User sender = userRepository.findById(senderId).orElseThrow();
-        User receiver = userRepository.findById(receiverId).orElseThrow();
-        List<Message> messages = chatMessageRepository.findBySenderAndReceiver(sender, receiver);
+    public ResponseEntity<?> getMessages(@RequestParam Long senderId, @RequestParam Long receiverId) {
+        List<Message> messages = chatMessageService.getMessage(senderId, receiverId);
+        for(Message message : messages){
+            message.getSender().setPassword(null);
+            message.getReceiver().setPassword(null);
+        }
         return ResponseEntity.ok(messages);
     }
 
-    @GetMapping("/contacts/{senderId}")
-    public ResponseEntity<List<User>> getContacts(@PathVariable Long senderId) {
-        User sender = userRepository.findById(senderId).orElseThrow(() -> new RuntimeException("User not found"));
-        System.out.println(sender);
-        List<User> contacts = chatMessageRepository.findDistinctReceiverBySender(sender);
-        for (User contact : contacts) {
-            System.out.println(contact);
-        }
+    @GetMapping("/messages/between")
+    public ResponseEntity<?> getMessagesBetween(@RequestParam Long user1Id, @RequestParam Long user2Id) {
+        List<Message> messages = chatMessageService.getMessagesBetweenUsers(user1Id, user2Id);
+        messages.forEach(message -> {
+            message.getSender().setPassword(null);
+            message.getReceiver().setPassword(null);
+        });
+        return ResponseEntity.ok(messages);
+    }
+
+    @Transactional
+    @GetMapping("/contacts/{userId}")
+    public ResponseEntity<?> getContacts(@PathVariable Long userId) {
+        List<User> contacts = chatMessageService.getContacts(userId);
         return ResponseEntity.ok(contacts);
     }
 }

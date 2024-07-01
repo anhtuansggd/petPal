@@ -98,7 +98,6 @@ public class IntegrationTests {
 //                ));
     }
 
-
     @Order(2)
     @Test
     public void testRegisteredUserThenReturnConflict() throws Exception {
@@ -284,7 +283,6 @@ public class IntegrationTests {
 //                ));
     }
 
-
     @Order(9)
     @ParameterizedTest
     @CsvSource({
@@ -335,32 +333,32 @@ public class IntegrationTests {
 
 
 //      PREVIOUS TEST CASE:
-
-        // mockMvc.perform(get("/api/caregivers/search")
-        //                 .param("petTypes", "DOG,CAT")
-        //                 .param("startDate", "2024-06-15")
-        //                 .param("endDate", "2024-06-20")
-        //                 .param("longitude", "8.7423401")
-        //                 .param("latitude", "50.1863407")
-        //                 .param("serviceType", "PET_HOSTING"))
-        //         .andExpect(status().isOk())
-        //         .andExpect(jsonPath("$", hasSize(equalTo(2))))
-        //         .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
-        //         .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")))
-        //         .andDo(result -> System.out.println("Request parameters: " + result.getRequest().getParameterMap()))
-        //         .andDo(document("search-caregivers",
-        //                 requestParameters(
-        //                         parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
-        //                         parameterWithName("startDate").description("Start date for service"),
-        //                         parameterWithName("endDate").description("End date for service"),
-        //                         parameterWithName("longitude").description("Longitude of the service location"),
-        //                         parameterWithName("latitude").description("Latitude of the service location"),
-        //                         parameterWithName("serviceType").description("Type of service required")
-        //                 ),
-        //                 responseFields(
-        //                         fieldWithPath("$").description("List of caregivers matching the criteria")
-        //                 )
-        //         ));
+//
+//         mockMvc.perform(get("/api/caregivers/search")
+//                         .param("petTypes", "DOG,CAT")
+//                         .param("startDate", "2024-06-15")
+//                         .param("endDate", "2024-06-20")
+//                         .param("longitude", "8.7423401")
+//                         .param("latitude", "50.1863407")
+//                         .param("serviceType", "PET_HOSTING"))
+//                 .andExpect(status().isOk())
+//                 .andExpect(jsonPath("$", hasSize(equalTo(2))))
+//                 .andExpect(jsonPath("$[0].petTypes", hasItems("DOG", "CAT")))
+//                 .andExpect(jsonPath("$[0].serviceTypes", hasItem("PET_HOSTING")))
+//                 .andDo(result -> System.out.println("Request parameters: " + result.getRequest().getParameterMap()))
+//                 .andDo(document("search-caregivers",
+//                         requestParameters(
+//                                 parameterWithName("petTypes").description("Types of pets the caregiver can handle"),
+//                                 parameterWithName("startDate").description("Start date for service"),
+//                                 parameterWithName("endDate").description("End date for service"),
+//                                 parameterWithName("longitude").description("Longitude of the service location"),
+//                                 parameterWithName("latitude").description("Latitude of the service location"),
+//                                 parameterWithName("serviceType").description("Type of service required")
+//                         ),
+//                         responseFields(
+//                                 fieldWithPath("$").description("List of caregivers matching the criteria")
+//                         )
+//                 ));
     }
 
     @Order(11)
@@ -368,29 +366,29 @@ public class IntegrationTests {
     public void testGetUserProfile() throws Exception {
         mockMvc.perform(get("/api/users/profile/{username}", "user"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("user"))
-                .andDo(document("get-user-profile",
-                        pathParameters(
-                                parameterWithName("username").description("The username of the user")
-                        ),
-                        responseFields(
-                                fieldWithPath("userId").description("The ID of the user"),
-                                fieldWithPath("username").description("The username of the user"),
-                                fieldWithPath("password").optional().description("The password of the user"),
-                                fieldWithPath("name").description("The name of the user"),
-                                fieldWithPath("email").description("The email address of the user"),
-                                fieldWithPath("phone").description("The phone number of the user"),
-                                fieldWithPath("location").optional().description("The location of the user"),
-                                fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
-                                fieldWithPath("authorities").description("Roles assigned to the user"),
-                                fieldWithPath("enabled").description("Status of the user's account"),
-                                fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
-                                fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
-                                fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
-
-                        )
-
-                ));
+                .andExpect(jsonPath("$.username").value("user"));
+//                 .andDo(document("get-user-profile",
+//                         pathParameters(
+//                                 parameterWithName("username").description("The username of the user")
+//                         ),
+//                         responseFields(
+//                                 fieldWithPath("userId").description("The ID of the user"),
+//                                 fieldWithPath("username").description("The username of the user"),
+//                                 fieldWithPath("password").optional().description("The password of the user"),
+//                                 fieldWithPath("name").description("The name of the user"),
+//                                 fieldWithPath("email").description("The email address of the user"),
+//                                 fieldWithPath("phone").description("The phone number of the user"),
+//                                 fieldWithPath("location").optional().description("The location of the user"),
+//                                 fieldWithPath("isCaregiver").description("Indicates if the user is a caregiver"),
+//                                 fieldWithPath("authorities").description("Roles assigned to the user"),
+//                                 fieldWithPath("enabled").description("Status of the user's account"),
+//                                 fieldWithPath("accountNonExpired").description("Indicates if the account is expired"),
+//                                 fieldWithPath("accountNonLocked").description("Indicates if the account is locked"),
+//                                 fieldWithPath("credentialsNonExpired").description("Indicates if the credentials are expired")
+//
+//                         )
+//
+//                 ));
     }
 
     @Order(12)
@@ -648,23 +646,47 @@ public class IntegrationTests {
                 "    \"message\": \"Another message to receiver 2\"\n" +
                 "}";
 
+        String jsonRequest4 = "{\n" +
+                "    \"senderId\": 2,\n" +
+                "    \"receiverId\": 1,\n" +
+                "    \"message\": \"From 2 to 1\"\n" +
+                "}";
+
+        String jsonRequest5 = "{\n" +
+                "    \"senderId\": 3,\n" +
+                "    \"receiverId\": 2,\n" +
+                "    \"message\": \"From 3 to 2\"\n" +
+                "}";
+
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 1"));
 
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest2))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 2"));
 
         mockMvc.perform(post("/api/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest3))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Message sent successfully"));
+                .andExpect(jsonPath("$").value("Message sent successfully: 3"));
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest4))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully: 4"));
+
+        mockMvc.perform(post("/api/chat/send")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest5))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("Message sent successfully: 5"));
 //                .andDo(document("send-message",
 //                        requestFields(
 //                                fieldWithPath("senderId").description("The ID of the user sending the message"),
@@ -679,9 +701,10 @@ public class IntegrationTests {
     @Order(23)
     @Test
     public void testGetMessages() throws Exception {
-        Long senderId = 1L; // Assuming this is a valid sender ID
-        Long receiverId2 = 2L; // Assuming this is a valid receiver ID
-        Long receiverId3 = 3L; // Assuming this is a valid receiver ID
+        Long senderId = 1L; 
+        Long receiverId2 = 2L; 
+        Long receiverId3 = 3L; 
+        
 
         mockMvc.perform(get("/api/chat/messages")
                         .param("senderId", senderId.toString())
@@ -704,18 +727,48 @@ public class IntegrationTests {
 //                ));
     }
 
-
-
     @Order(24)
     @Test
+    public void testGetMessagesBetweenUsers() throws Exception {
+    Long user1Id = 1L;
+    Long user2Id = 2L;
+
+    mockMvc.perform(get("/api/chat/messages/between")
+                    .param("user1Id", user1Id.toString())
+                    .param("user2Id", user2Id.toString()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+            .andExpect(jsonPath("$[0].message").exists()); // Check that the message field exists
+//             .andDo(document("get-messages-between-users",
+//                     responseFields(
+//                     // fieldWithPath("$").description("List of messages exchanged between the two users"),
+//                     fieldWithPath("$[*].message").description("The content of each message")
+//                     )
+//             ));
+
+//    @Test
+//    public void testGetMessagesBetweenUsers() throws Exception {
+//        Long user1Id = 1L; // Assuming this is a valid user ID
+//        Long user2Id = 2L; // Assuming this is another valid user ID
+//
+//        MvcResult result = mockMvc.perform(get("/api/chat/messages/between")
+//                        .param("user1Id", user1Id.toString())
+//                        .param("user2Id", user2Id.toString()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1)))) // Check for at least one message
+//                .andExpect(jsonPath("$[0].message").exists()) // Check that the message field exists
+//                .andReturn();
+//
+//        String jsonResponse = result.getResponse().getContentAsString();
+//        System.out.println("Messages between User " + user1Id + " and User " + user2Id + ": " + jsonResponse);
+    }
+
+    @Order(25)
+    @Test
     public void testGetContacts() throws Exception {
-        Long senderId = 1L; // Assuming this is a valid sender ID
+        Long userId = 3L; // Assuming this is a valid user ID
 
-        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        mockMvc.perform(get("/api/chat/contacts/{senderId}", senderId))
+        mockMvc.perform(get("/api/chat/contacts/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThan(0))))
                 .andExpect(jsonPath("$[0].userId").exists())
@@ -724,14 +777,34 @@ public class IntegrationTests {
                 .andExpect(jsonPath("$[1].name").exists());
 //                .andDo(document("get-contacts",
 //                        pathParameters(
-//                                parameterWithName("senderId").description("The ID of the user whose contacts are being retrieved")
+//                                parameterWithName("userId").description("The ID of the user whose contacts are being retrieved")
 //                        ),
 //                        responseFields(
-//                                fieldWithPath("$").description("List of users who have had conversations with the sender")
-//                        )));
+//                                fieldWithPath("$[*].userId").description("The ID of the contact"),
+//                                fieldWithPath("$[*].username").description("The username of the contact"),
+//                                fieldWithPath("$[*].message").description("A message associated with the contact")
+//                        )
+//                ));
+
+//    @Test
+//    public void testGetContacts() throws Exception {
+//        Long userId = 3L; // Assuming this is a valid user ID
+//
+//        MvcResult result = mockMvc.perform(get("/api/chat/contacts/{userId}", userId))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
+//                .andExpect(jsonPath("$[0].userId").exists())
+//                .andExpect(jsonPath("$[0].name").exists())
+//                .andExpect(jsonPath("$[1].userId").exists())
+//                .andExpect(jsonPath("$[1].name").exists())
+//                .andReturn();
+//
+//        // Print out the response content
+//        String jsonResponse = result.getResponse().getContentAsString();
+//        System.out.println("Contacts for User " + userId + ": " + jsonResponse);
     }
 
-    @Order(25)
+    @Order(26)
     @Test
     public void testUploadPetMainAvatar() throws Exception {
         MockMultipartFile file = new MockMultipartFile("avatar", "avatar.jpg", "image/jpeg", "test image content".getBytes());
@@ -747,7 +820,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(26)
+    @Order(27)
     @Test
     public void testUploadPetAdditionalImages() throws Exception {
         MockMultipartFile file1 = new MockMultipartFile("images", "image1.jpg", "image/jpeg", "image1 content".getBytes());
@@ -764,7 +837,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(27)
+    @Order(28)
     @Test
     public void testUploadUserAvatar() throws Exception {
         MockMultipartFile avatarFile = new MockMultipartFile("avatar", "userAvatar.jpg", "image/jpeg", "avatar content".getBytes());
@@ -780,7 +853,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(28)
+    @Order(29)
     @Test
     public void testGetPetMainAvatar() throws Exception {
         mockMvc.perform(get("/api/pets/1/avatar"))
@@ -793,7 +866,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(29)
+    @Order(30)
     @Test
     public void testGetUserAvatar() throws Exception {
         mockMvc.perform(get("/api/users/profile/1/avatar"))
@@ -806,7 +879,7 @@ public class IntegrationTests {
 //                ));
     }
 
-    @Order(30)
+    @Order(31)
     @Test
     public void testGetPetAdditionalImages() throws Exception {
         Long petId = 1L; // Assuming this is a valid pet ID with images

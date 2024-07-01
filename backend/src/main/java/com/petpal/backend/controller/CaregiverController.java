@@ -29,6 +29,7 @@ public class CaregiverController {
     public ResponseEntity<?> getCaregiverProfile(@PathVariable Long caregiverId) {
         Optional<Caregiver> caregiver = caregiverService.findById(caregiverId);
         if (caregiver.isPresent()) {
+            caregiver.get().setPassword(null);
             return ResponseEntity.status(HttpStatus.OK).body(caregiver);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -84,6 +85,9 @@ public class CaregiverController {
             @RequestParam ServiceTypeEnum serviceType) {
 
         List<Caregiver> caregivers = caregiverService.searchCaregivers(petTypes, startDate, endDate,  serviceType, longitude, latitude);
+        for(Caregiver caregiver : caregivers){
+            caregiver.setPassword(null);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(caregivers);
     }
 
@@ -91,6 +95,7 @@ public class CaregiverController {
     public ResponseEntity<?> updateCaregiverPetTypes(@PathVariable Long caregiverId, @RequestBody List<PetTypeEnum> petTypes) {
         try {
             Caregiver updatedCaregiver = caregiverService.updatePetTypes(caregiverId, petTypes);
+            updatedCaregiver.setPassword(null);
             return ResponseEntity.ok(updatedCaregiver);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
@@ -101,6 +106,7 @@ public class CaregiverController {
     public ResponseEntity<?> updateCaregiverServiceTypes(@PathVariable Long caregiverId, @RequestBody List<ServiceTypeEnum> serviceTypes) {
         try {
             Caregiver updatedCaregiver = caregiverService.updateServiceTypes(caregiverId, serviceTypes);
+            updatedCaregiver.setPassword(null);
             return ResponseEntity.ok(updatedCaregiver);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Caregiver not found"));
