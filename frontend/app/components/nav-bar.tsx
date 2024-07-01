@@ -11,15 +11,11 @@ export default function NavBar() {
 
   useEffect(() => {
     const loginData = localStorage.getItem("loginData");
-    const signupData = localStorage.getItem("signupData");
     if (loginData) {
       setUser(JSON.parse(loginData));
 
       console.log(loginData);
-    } else if (signupData) {
-      setUser(JSON.parse(signupData));
-      console.log(signupData);
-    }
+    } 
   }, []);
   return (
     <>
