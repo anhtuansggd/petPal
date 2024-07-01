@@ -89,8 +89,8 @@ export default function SitterInfo() {
                   placeholder="Dog, Car or Guinea Pig"
                 ></Input>
               </div>
-              <div className="mb-4 flex">
-                <div className="flex items-center mr-4">
+              <div className="mb-4 flex flex-col gap-4">
+                <div className="flex items-center">
                   <Input
                     onChange={(e) => setStartDate(e.target.value)}
                     type="date"
@@ -121,7 +121,7 @@ export default function SitterInfo() {
             <div className="bg-white rounded-lg shadow-md p-4 mb-4">
               <div className="flex items-center mb-2">
                 <h3 className="text-primary-dark-green text-2xl font-bold">
-                  Sitting
+                  Pet Sitting
                 </h3>
               </div>
               <p className="text-gray-600">Overnight at your home</p>
@@ -130,7 +130,7 @@ export default function SitterInfo() {
             <div className="bg-white rounded-lg shadow-md p-4 mb-4">
               <div className="flex items-center mb-2">
                 <h3 className="text-primary-dark-green text-2xl font-bold">
-                  Day care
+                  Pet Hosting
                 </h3>
               </div>
               <p className="text-gray-600">During working hours</p>

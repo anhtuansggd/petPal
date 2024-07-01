@@ -105,22 +105,22 @@ export default function SearchBar() {
             <Option value="DAY_CARE">Pet Hostingß</Option>
           </Select>
         </div>
-        <div>
+        {/* <div>
           <Input
             type="date"
             color="teal"
             label="Start day"
             className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500"
           />
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Input
             type="date"
             color="teal"
             label="End day"
             className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500"
           />
-        </div>
+        </div> */}
         <div>
           {" "}
           <Select
