@@ -142,17 +142,6 @@ export default function SearchBar() {
 
       <div className="w-9/12 mt-12 mx-auto">
         <Map />
-        {/*<Link href={"/sitter-info"}>
-          <Image
-            src="/sitter1.jpg"
-            width="0"
-            height="0"
-            sizes="100vw"
-            style={{ width: "100%", height: "auto" }}
-            alt="Map image"
-            className="rounded"
-          />
-        </Link> */}
       </div>
     </div>
   );

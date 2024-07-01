@@ -8,15 +8,15 @@ import { Avatar, Button } from "@material-tailwind/react";
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
-
   useEffect(() => {
     const loginData = localStorage.getItem("loginData");
     if (loginData) {
       setUser(JSON.parse(loginData));
 
       console.log(loginData);
-    } 
+    }
   }, []);
+
   return (
     <>
       <div className="w-full h-20 bg-white z-50 sticky top-0 border-y">

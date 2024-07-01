@@ -57,10 +57,7 @@ export default function SignUp() {
           // Add any other relevant user data you want to store
         })
       );
-      // const expirationTime = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
-      // localStorage.setItem("sessionExpiration", expirationTime.toString());
 
-      // Redirect to home page
       router.push("/log-in");
     } catch (error) {
       console.error("Error during registration:", error);
@@ -156,17 +153,6 @@ export default function SignUp() {
                   onChange={(e) => setIsCareGiver(e.target.value)}
                   value={isCaregiver}
                 />
-                {/* <Select
-                  className="rounded-lg px-3 py-2 "
-                  variant="outlined"
-                  color="teal"
-                  label="You are?"
-                  // onChange={(e) => setIsCareGiver(e.target.value)}
-                  // value={isCareGiver}
-                >
-                  <Option value="0">Pet owner</Option>
-                  <Option value="1">Care giver</Option>
-                </Select> */}
               </div>
 
               <Button

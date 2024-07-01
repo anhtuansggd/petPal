@@ -46,12 +46,10 @@ export default function Login() {
           email: data.email,
           username: data.username,
           isCaregiver: data.isCaregiver,
-
-          // Add any other relevant user data you want to store
         })
       );
-      // Save session to local storage
-      localStorage.setItem("session", JSON.stringify(data));
+      // // Save session to local storage
+      // localStorage.setItem("session", JSON.stringify(data));
 
       // Set session expiration
       const expirationTime = new Date().getTime() + 60 * 60 * 1000; // 60 minutes

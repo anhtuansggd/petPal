@@ -36,8 +36,6 @@ export default function UserProfile() {
 
         const data = await response.json();
         setUser(data);
-        // Optionally, store the user data in localStorage if needed
-        // localStorage.setItem("userData", JSON.stringify(data));
         console.log(data);
       } catch (error) {
         console.error("Error fetching user data:", error);

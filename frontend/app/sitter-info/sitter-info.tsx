@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input, Button } from "@material-tailwind/react";
 import Link from "next/link";
 import NavBar from "../components/nav-bar";
 import Footer from "../components/footer";
-import { useRouter } from "next/navigation";
 
 export default function SitterInfo() {
   const router = useRouter();
@@ -12,9 +12,8 @@ export default function SitterInfo() {
   const [petType, setPetType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const handleContract = async (e: React.FormEvent<HTMLFormElement>) => {
-    // const [isLoading, setIsLoading] = useState(false);
 
+  const handleContract = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const Contract = {
@@ -24,6 +23,8 @@ export default function SitterInfo() {
       endDate,
     };
     localStorage.setItem("contractData", JSON.stringify(Contract));
+
+    router.push("/chat-page");
   };
 
   return (
@@ -109,11 +110,9 @@ export default function SitterInfo() {
                 </div>
               </div>
               <div>
-                <Link href={"/chat-page"}>
-                  <Button type="submit" className="bg-primary-dark-green">
-                    Contact Sitter
-                  </Button>
-                </Link>
+                <Button type="submit" className="bg-primary-dark-green">
+                  Contact Sitter
+                </Button>
               </div>
             </form>
           </div>
