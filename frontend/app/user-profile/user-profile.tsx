@@ -52,23 +52,6 @@ export default function UserProfile() {
           <div className="col-span-4 sm:col-span-3">
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center">
-                {/* {user &&
-                  user.map((userData, index) => (
-                    <div key={userData.id}>
-                      <img
-                        src={
-                          userData.picture ||
-                          "https://randomuser.me/api/portraits/men/5.jpg"
-                        }
-                        className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
-                      />
-                      <h1 className="text-xl font-bold">{userData.name}</h1>
-                      <p className="text-gray-700">
-                        {userData.role || "Pet owner"}
-                      </p>
-                    </div>
-                  ))} */}
-
                 <div>
                   {" "}
                   {/* Ensure you have a unique key here */}

@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Button, Typography } from "@material-tailwind/react";
-
+import Link from "next/link";
 mapboxgl.accessToken =
   "pk.eyJ1IjoidHN1ZHkiLCJhIjoiY2x0eWRpMHI1MGd2ejJpbzBla3JxNndmbiJ9.ICPd6DnmHNqmGN0P5-Sbmw";
 
@@ -19,8 +19,6 @@ const Map = () => {
     x: 0,
     y: 0,
     content: "",
-    lng: 0,
-    lat: 0,
   });
 
   const generateRandomCoordinates = (center, radius = 0.01) => {
@@ -88,13 +86,20 @@ const Map = () => {
               visible: true,
               x: rect.left,
               y: rect.top,
-              content: `<img src="${imagePath}" alt="Caregiver ${
+
+              // content: `<img src="${imagePath}" alt="Caregiver style="width:150px; height: auto;" /><br/> Caregiver ${
+              //   i + 1
+              // }`,
+
+              content: `
+                <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
+                  <img src="${imagePath}" alt="Caregiver ${
                 i + 1
-              }" style="width: 100px; height: 100px;" /><br/>Caregiver ${
-                i + 1
-              }`,
-              lng: nearbyLocation.longitude,
-              lat: nearbyLocation.latitude,
+              }" style="width:150px; height: auto; display: block; margin-bottom: 10px;" />
+                  <p className = "text-2xl">Shannon Payne</p>
+                  <div style="color: #f5d142; font-size: 14px;">★★★★☆ (123 reviews)</div>
+                </div>
+                       `,
             });
           });
         }
@@ -164,7 +169,7 @@ const Map = () => {
       <div
         className="map-container"
         ref={mapContainerRef}
-        style={{ width: "100%", height: "400px" }}
+        style={{ width: "100%", height: "500px" }}
       />
       {popoverInfo.visible && (
         <div
@@ -174,19 +179,23 @@ const Map = () => {
             top: popoverInfo.y,
             backgroundColor: "white",
             padding: "10px",
+            borderRadius: "10px",
+
             border: "1px solid black",
           }}
         >
           <Typography
+            className="mb-2"
             dangerouslySetInnerHTML={{ __html: popoverInfo.content }}
           />
-          <Typography>Longitude: {popoverInfo.lng}</Typography>
-          <Typography>Latitude: {popoverInfo.lat}</Typography>
-          <Button
-            onClick={() => setPopoverInfo({ ...popoverInfo, visible: false })}
-          >
-            Close
-          </Button>
+          <Link href="/sitter-info">
+            <Button
+              className="bg-primary-light-green hover:bg-primary-dark-green duration-300"
+              onClick={() => setPopoverInfo({ ...popoverInfo, visible: false })}
+            >
+              Contact
+            </Button>
+          </Link>
         </div>
       )}
     </div>

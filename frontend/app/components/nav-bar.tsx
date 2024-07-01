@@ -28,9 +28,9 @@ export default function NavBar() {
           <div className="flex justify-between items-center h-full">
             <Link className=" text-primary-light-green" href="/home-page">
               <Image
-                src="/logo.png"
-                height={300}
-                width={240}
+                src="/petpal_logo.png"
+                height={0}
+                width={160}
                 alt="Hero image"
                 className="rounded"
               />

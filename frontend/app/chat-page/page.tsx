@@ -4,6 +4,7 @@ import Chat from "./chat";
 import ChatSideBar from "./chatSideBar";
 import { useState, useEffect } from "react";
 import { Account } from "./interfaces";
+import Contract from "./contract";
 
 export default function ChatPage() {
   const [accounts, setAccounts] = useState<Account[]>([
@@ -21,6 +22,7 @@ export default function ChatPage() {
     <div className="flex grow w-full h-full">
       <ChatSideBar accounts={accounts} onAccountSelect={onAccountSelect} />
       <Chat selectedAccount={selectedAccount} />
+      <Contract />
     </div>
   );
 }

@@ -49,7 +49,7 @@ export default function SignUp() {
 
       // Save user data and session to local storage
       localStorage.setItem(
-        "signupData",
+        "loginData",
         JSON.stringify({
           name: data.name,
           email: data.email,

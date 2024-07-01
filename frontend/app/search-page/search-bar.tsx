@@ -102,7 +102,7 @@ export default function SearchBar() {
             value={serviceType}
           >
             <Option value="PET_SITTING">Pet Sitting</Option>
-            <Option value="DAY_CARE">Day Care</Option>
+            <Option value="DAY_CARE">Pet Hostingß</Option>
           </Select>
         </div>
         <div>

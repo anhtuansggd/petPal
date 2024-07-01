@@ -6,8 +6,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Alert } from "@material-tailwind/react";
 
-// import getData from "../services/fetchService";
-
 export default function Login() {
   const router = useRouter();
   const [username, setUserName] = useState("");
