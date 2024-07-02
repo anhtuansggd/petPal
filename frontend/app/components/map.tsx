@@ -40,7 +40,7 @@ interface PopoverInfo {
 
 const Map = () => {
   const mapContainerRef = useRef(null);
-  const mapRef = useRef< mapboxgl.Map | null>(null);
+  const mapRef = useRef< mapboxgl.Map |null>(null);
   const [lng, setLng] = useState(106.7);
   const [lat, setLat] = useState(10.8);
   const [zoom, setZoom] = useState(14);
@@ -50,99 +50,11 @@ const Map = () => {
     y: 0,
     content: "",
   });
+  const [userMarker, setUserMarker] = useState<mapboxgl.Marker | null>(null);
+  const [caregiverMarkers, setCaregiverMarkers] = useState<mapboxgl.Marker[]>([]);
 
-  const locateUser = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const center: [number, number] = [position.coords.longitude, position.coords.latitude];
-        if (mapRef.current) {
-          mapRef.current.flyTo({
-            center: center,
-            zoom: 14,
-          });
-        }
-
-        const markers = document.getElementsByClassName("mapboxgl-marker");
-        while (markers[0]) {
-          markers[0].parentNode?.removeChild(markers[0]);
-        }
-
-        if (mapRef.current) {
-          const userMarker = new mapboxgl.Marker({ color: "red" })
-            .setLngLat(center)
-            .addTo(mapRef.current);
-
-          userMarker.getElement().addEventListener("click", (e) => {
-            if (!e.target) return; // Ensure e.target is not null
-            const rect = (e.target as HTMLElement).getBoundingClientRect();
-            setPopoverInfo({
-              visible: true,
-              x: rect.left,
-              y: rect.top,
-              content: "You are here",
-              lng: center[0],
-              lat: center[1],
-            });
-          });
-        }
-
-        // Simulate adding nearby caregivers
-        for (let i = 0; i < 1; i++) {
-          const nearbyLocation = generateRandomCoordinates(
-            position.coords,
-            1000
-          ); // 1000 meters radius
-          if (mapRef.current) {
-            const caregiverMarker = new mapboxgl.Marker()
-              .setLngLat([nearbyLocation.longitude, nearbyLocation.latitude])
-              .addTo(mapRef.current);
-
-            caregiverMarker.getElement().addEventListener("click", (e) => {
-              const rect = (e.target as HTMLElement).getBoundingClientRect();
-              const imagePath = `/shannon.jpg`;
-              console.log(`Image path: ${imagePath}`);
-              setPopoverInfo({
-                visible: true,
-                x: rect.left,
-                y: rect.top,
-
-                // content: `<img src="${imagePath}" alt="Caregiver style="width:150px; height: auto;" /><br/> Caregiver ${
-                //   i + 1
-                // }`,
-
-                content: `
-                  <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
-                    <img src="${imagePath}" alt="Caregiver ${
-                  i + 1
-                }" style="width:150px; height: auto; display: block; margin-bottom: 10px;" />
-                    <p className = "text-2xl">Shannon Payne</p>
-                    <div style="color: #f5d142; font-size: 14px;">★★★★☆ (123 reviews)</div>
-                  </div>
-                         `,
-              });
-            });
-          }
-        }
-      },
-      (err) => {
-        console.log("Geolocation error: ", err);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      }
-    );
-  };
-
-  // Initialize map when component mounts
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLng(position.coords.longitude);
-      setLat(position.coords.latitude);
-    });
-
-    if (mapContainerRef.current) {
+    if (mapContainerRef.current && !mapRef.current) {
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
@@ -154,12 +66,6 @@ const Map = () => {
 
       // Add navigation control (the +/- zoom buttons)
       map.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-      map.on("move", () => {
-        setLng(parseFloat(map.getCenter().lng.toFixed(4)));
-        setLat(parseFloat(map.getCenter().lat.toFixed(4)));
-        setZoom(parseFloat(map.getZoom().toFixed(2)));
-      });
 
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -175,12 +81,105 @@ const Map = () => {
         setZoom(14);
       });
 
-      // Cleanup function
-      return () => {
-        if (map) map.remove();
-      };
+      // Initial marker placement
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const center: [number, number] = [position.coords.longitude, position.coords.latitude];
+          setLng(center[0]);
+          setLat(center[1]);
+          setZoom(14);
+          
+          addMarkers(center);
+        },
+        (err) => console.log("Geolocation error: ", err),
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    }
+  }, []);
+
+  const addMarkers = (center: [number, number]) => {
+    if (!mapRef.current) return;
+
+    // Remove existing markers
+    if (userMarker) userMarker.remove();
+    caregiverMarkers.forEach(marker => marker.remove());
+
+    // Add user marker
+    const newUserMarker = new mapboxgl.Marker({ color: "red" })
+      .setLngLat(center)
+      .addTo(mapRef.current);
+    setUserMarker(newUserMarker);
+
+    // Add caregiver markers
+    const newCaregiverMarkers = [];
+    for (let i = 0; i < 5; i++) {
+      const nearbyLocation = generateRandomCoordinates({ latitude: center[1], longitude: center[0] }, 1000);
+      const caregiverMarker = new mapboxgl.Marker()
+        .setLngLat([nearbyLocation.longitude, nearbyLocation.latitude])
+        .addTo(mapRef.current);
+      newCaregiverMarkers.push(caregiverMarker);
+    }
+    setCaregiverMarkers(newCaregiverMarkers);
+
+    // Add click listeners to markers
+    newUserMarker.getElement().addEventListener("click", (e) => {
+      if (!e.target) return; // Ensure e.target is not null
+      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      setPopoverInfo({
+        visible: true,
+        x: rect.left,
+        y: rect.top,
+        content: "You are here",
+        lng: center[0],
+        lat: center[1],
+      });
+    });
+
+    newCaregiverMarkers.forEach((marker, index) => {
+      marker.getElement().addEventListener("click", (e) => {
+        const rect = (e.target as HTMLElement).getBoundingClientRect();
+        const imagePath = `/shannon.jpg`;
+        console.log(`Image path: ${imagePath}`);
+        setPopoverInfo({
+          visible: true,
+          x: rect.left,
+          y: rect.top,
+
+          content: `
+            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
+              <img src="${imagePath}" alt="Caregiver ${
+            index + 1
+          }" style="width:150px; height: auto; display: block; margin-bottom: 10px;" />
+              <p className = "text-2xl">Shannon Payne</p>
+              <div style="color: #f5d142; font-size: 14px;">★★★★☆ (123 reviews)</div>
+            </div>
+                         `,
+        });
+      });
+    });
+  };
+
+  // Update map when lng, lat, or zoom changes
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setCenter([lng, lat]);
+      mapRef.current.setZoom(zoom);
     }
   }, [lng, lat, zoom]);
+
+  const locateUser = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const center: [number, number] = [position.coords.longitude, position.coords.latitude];
+        setLng(center[0]);
+        setLat(center[1]);
+        setZoom(14);
+        addMarkers(center);
+      },
+      (err) => console.log("Geolocation error: ", err),
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+  };
 
   return (
     <div>
