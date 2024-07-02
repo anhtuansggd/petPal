@@ -21,7 +21,7 @@ export default function UserProfile() {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "http://backend:8081/api/users/profile/test",
+          "/api/users/profile/test",
           {
             method: "GET",
             headers: {
