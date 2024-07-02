@@ -31,7 +31,7 @@ export default function SignUp() {
     };
 
     try {
-      const res = await fetch("http://backend:8081/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
