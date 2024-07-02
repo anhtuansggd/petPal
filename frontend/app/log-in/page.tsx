@@ -7,7 +7,6 @@ export default function Page() {
     <div className="flex min-h-screen flex-col">
       <NavBar />
       <LogIn />
-      <Footer />
     </div>
   );
 }
