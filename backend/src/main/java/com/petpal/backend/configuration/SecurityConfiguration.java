@@ -17,10 +17,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Arrays;
 
 @Configuration
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SecurityConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -41,25 +44,25 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/api/auth/**", "/api/users/**", "/api/pets/**", "/api/caregivers/**", "/api/contracts/**", "/api/chat/**");
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(request -> {
-                CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Adjust this to match your frontend's URL
-                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+                CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+                configuration.setAllowedOrigins(Arrays.asList("*"));
+                configuration.setAllowedMethods(Arrays.asList("*"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowCredentials(true);
                 return configuration;
             }))
-            .authorizeHttpRequests(request -> {
-                request.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/pets/**").permitAll()
-                        .requestMatchers("/api/caregivers/**").permitAll()
-                        .requestMatchers("/api/contracts/**").permitAll()
-                        .requestMatchers("/api/chat/**").permitAll()
-                        .anyRequest().authenticated();
-            })
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
+            )
             .build();
     }
 
