@@ -38,6 +38,10 @@ The platform displays a map with nearby caregivers, and Emily can view their pro
 ### Returning Pet
 ![Returning Pet](https://github.com/anhtuansggd/petPal/assets/35883067/a0bce5f7-1e48-4443-9799-750af2b870a1)
 
+## System Architecture Diagram
+![image](https://github.com/anhtuansggd/petPal/assets/35883067/7bfb5331-58d0-410c-ad22-9d1a80063fa9)
+
+
 ## Database and Data Organization
 ![Database](https://github.com/anhtuansggd/petPal/assets/35883067/242b0b73-c97b-4574-9dad-3bbc55faff10)
 ![Database](https://github.com/anhtuansggd/petPal/assets/35883067/fce264d4-2be8-4915-bbf8-ebf561c27d25)
